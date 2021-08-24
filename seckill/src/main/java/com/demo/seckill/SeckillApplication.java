@@ -1,14 +1,17 @@
 package com.demo.seckill;
 
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-@EnableAutoConfiguration
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import tk.mybatis.spring.annotation.MapperScan;
+
+
+@SpringBootApplication(scanBasePackages = {"com.demo.seckill"})
+@MapperScan("com.demo.seckill.repository")
 public class SeckillApplication {
 
+
 	public static void main(String[] args) {
-		System.out.println("Hello World!");
 		SpringApplication.run(SeckillApplication.class, args);
 	}
 

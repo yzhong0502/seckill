@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE generatorConfiguration PUBLIC
+        "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+        "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd" >
+<generatorConfiguration>
+    <context id="DB2Tables" defaultModelType="flat" targetRuntime="MyBatis3">
+        <!-- Generated Java Document coding -->
+        <property name="javaFileEncoding" value="UTF-8"/>
+        <!-- format java code -->
+        <property name="javaFormatter" value="org.mybatis.generator.api.dom.DefaultJavaFormatter"/>
+        <!-- beginningDelimiter and endingDelimiter: A symbol that indicates the name of a database object, such as ORACLE It's double quotes, MYSQL The default is`Back quotation marks; -->
+        <property name="beginningDelimiter" value="`"/>
+        <property name="endingDelimiter" value="`"/>
+        <!-- JavaBean Implement serialization interface -->
+        <plugin type="org.mybatis.generator.plugins.SerializablePlugin"/>
+
+        <!-- generat entity Time,generate toString -->
+        <plugin type="org.mybatis.generator.plugins.ToStringPlugin"/>
+        <!-- Here is the Example Renamed as Criteria Of course, you can change it to anything~    -->
+        <plugin type="org.mybatis.generator.plugins.RenameExampleClassPlugin">
+            <property name="searchString" value="Example$"/>
+            <property name="replaceString" value="Selective"/>
+        </plugin>
+
+        <commentGenerator type="org.mybatis.generator.internal.DefaultCommentGenerator">
+            <!-- Remove automatically generated comments true: Yes: false:no -->
+            <property name="suppressAllComments" value="true"/>
+        </commentGenerator>
+
+        <!--Database connection information: driver class, connection address, user name, password -->
+        <jdbcConnection driverClass="com.mysql.cj.jdbc.Driver"
+                        connectionURL="jdbc:mysql://localhost:3306/seckill?characterEncoding=utf8&amp;useSSL=false&amp;serverTimezone=GMT%2B8"
+                        userId="root"
+                        password="521987zy">
+            <property name="nullCatalogMeansCurrent" value="true"/>
+        </jdbcConnection>
+        <!-- default false，hold JDBC DECIMAL and NUMERIC The type resolves to Integer，by true Shiba JDBC DECIMAL and
+            NUMERIC The type resolves to java.math.BigDecimal -->
+        <javaTypeResolver>
+            <property name="forceBigDecimals" value="true"/>
+        </javaTypeResolver>
+
+        <!-- targetProject:generate PO The location of the class -->
+        <javaModelGenerator targetPackage="com.demo.seckill.entity"
+                            targetProject="./src/main/java">
+            <!-- stay targetPackage Based on the database of schema Regenerate into a layer package，The final generated class is placed in this package The default is false -->
+            <property name="enableSubPackages" value="true"/>
+            <!-- The space before and after the value returned from the database is cleaned up -->
+            <property name="trimStrings" value="true"/>
+        </javaModelGenerator>
+        <!-- targetProject:mapper The location where the mapping file is generated -->
+        <sqlMapGenerator targetPackage="mapping" targetProject="./src/main/resources">
+            <!-- enableSubPackages:Whether to let schema As a suffix for the package -->
+            <property name="enableSubPackages" value="true"/>
+        </sqlMapGenerator>
+
+        <!-- targetPackage: mapper Where the interface is generated -->
+        <javaClientGenerator type="XMLMAPPER" targetPackage="com.demo.seckill.repository"
+                             targetProject="./src/main/java">
+            <!-- enableSubPackages:Whether to let schema As a suffix for the package -->
+            <property name="enableSubPackages" value="true"/>
+        </javaClientGenerator>
+
+        <!-- Specify database table -->
+        <!-- <table schema="" tableName="WECHAT_MESSAGE"/> -->
+
+        <table schema="" tableName="user_info" domainObjectName="UserDO"
+               enableCountByExample="false"
+               enableDeleteByExample="false"
+               enableUpdateByExample="false"
+               enableSelectByExample="false"
+               selectByExampleQueryId="false"
+        />
+        <!-- Specify all tables in the database  -->
+        <!-- <table schema="" tableName="%"/> -->
+        <!-- Some table fields need to be specified java type
+         <table schema="" tableName="">
+            <columnOverride column="" javaType="" />
+        </table> -->
+        <table schema="" tableName="user_credentials" domainObjectName="UserCreDO"
+               enableCountByExample="false"
+               enableDeleteByExample="false"
+               enableUpdateByExample="false"
+               enableSelectByExample="false"
+               selectByExampleQueryId="false"
+        />
+    </context>
+</generatorConfiguration>
+
+
+
