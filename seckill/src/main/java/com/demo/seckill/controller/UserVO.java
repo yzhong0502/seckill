@@ -1,7 +1,7 @@
-package com.demo.seckill.service.model;
+package com.demo.seckill.controller;
 
-//核心领域模型
-public class UserModel {
+//view object传回前端的对象，用以控制前端能获得的信息
+public class UserVO {
     private Integer id;
 
     private String name;
@@ -12,12 +12,7 @@ public class UserModel {
 
     private String telphone;
 
-    private String registerMode;
-
     private String address;
-
-    private String encryptedPassword;
-
 
     public Integer getId() {
         return id;
@@ -32,7 +27,7 @@ public class UserModel {
     }
 
     public void setName(String name) {
-        this.name = name == null ? null : name.trim();
+        this.name = name;
     }
 
     public Byte getGender() {
@@ -56,15 +51,7 @@ public class UserModel {
     }
 
     public void setTelphone(String telphone) {
-        this.telphone = telphone == null ? null : telphone.trim();
-    }
-
-    public String getRegisterMode() {
-        return registerMode;
-    }
-
-    public void setRegisterMode(String registerMode) {
-        this.registerMode = registerMode == null ? null : registerMode.trim();
+        this.telphone = telphone;
     }
 
     public String getAddress() {
@@ -72,10 +59,7 @@ public class UserModel {
     }
 
     public void setAddress(String address) {
-        this.address = address == null ? null : address.trim();
+        this.address = address;
     }
 
-
-    public void setEncryptPassword(String encryptPassword) {
-    }
 }

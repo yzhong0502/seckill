@@ -1,6 +1,8 @@
 package com.demo.seckill.service;
 
+import com.demo.seckill.service.model.UserModel;
+
 public interface UserService {
 
-    void getUserById(Integer id);
+    UserModel getUserById(Integer id);
 }
