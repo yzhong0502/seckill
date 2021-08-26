@@ -1,0 +1,68 @@
+<div class="offset">
+  <form [formGroup]="form" novalidate (ngSubmit)="onSubmit()">
+    <mat-card>
+      <mat-card-header>
+        <mat-card-title class="center">Login</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+                
+        <div class="row">
+          <div class="col">
+            <mat-form-field class="full-width">
+              <input matInput placeholder="Name" formControlName="name">
+              <mat-error *ngIf="form.controls['name'].hasError('required')">
+                Name is <strong>required</strong>
+              </mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col">
+            <mat-form-field class="full-width">
+              <input matInput placeholder="Phone Number" formControlName="phone">
+              <mat-error *ngIf="form.controls['phone'].hasError('required')">
+                Phone number is <strong>required</strong>
+              </mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <mat-form-field class="full-width">
+                    <div class="float">
+                        <mat-label>Gender</mat-label>
+                    </div>
+                    <mat-radio-group formControlName="gender">
+                        <div class="float">
+                            <mat-radio-button value="0">Male</mat-radio-button>
+                        </div>
+                        <div class="float">
+                            <mat-radio-button value="1">Female</mat-radio-button>
+                        </div>
+                    </mat-radio-group>
+                    <input matInput type="number" placeholder="Age" formControlName="age">
+                    <mat-error *ngIf="form.controls['age'].hasError('min')">
+                        Age can't be <strong>negative</strong>
+                    </mat-error>
+                </mat-form-field>
+            </div>
+        </div> 
+        <div class="row">
+            <div class="col">
+              <mat-form-field class="full-width">
+                <input matInput placeholder="Address" formControlName="address">
+                <mat-error *ngIf="form.controls['address'].hasError('required')">
+                  Address is <strong>required</strong>
+                </mat-error>
+              </mat-form-field>
+            </div>
+        </div>
+  
+      </mat-card-content>
+      <mat-card-actions>
+        <button mat-raised-button color="primary" type="submit" disabled="form.invalid">Submit</button>
+      </mat-card-actions>
+    </mat-card>
+  </form>
+</div>
