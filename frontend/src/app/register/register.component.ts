@@ -12,13 +12,17 @@ import { Router } from '@angular/router';
 import { RequestService } from '../service/request.service';
 
 @Component({
-  selector: 'app-login',
-  templateUrl: './login.component.html',
-  styleUrls: ['./login.component.css']
+  selector: 'app-register',
+  templateUrl: './register.component.html',
+  styleUrls: ['./register.component.css']
 })
-export class LoginComponent implements OnInit {
+export class RegisterComponent implements OnInit {
   form: FormGroup = this.fb.group({
-    telphone:[null, [Validators.required, Validators.pattern("[0-9]*")]],
+    name:[null, [Validators.required, Validators.pattern("[0-9a-zA-Z]*")]],
+    phone:[null, [Validators.required, Validators.pattern("[0-9]*")]],
+    gender:[null],
+    age:[null, Validators.min(0)],
+    address:[null, Validators.required],
     password:[null, Validators.required]
   });
 
@@ -28,19 +32,15 @@ export class LoginComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  login(): void {
+  register(): void {
     console.log(this.form.value);
-    this.service.login(this.form.value).subscribe(response=>{
+    this.service.register(this.form.value).subscribe(response=>{
       if (response.status==='success') {
         this.router.navigateByUrl('/seckill');
       } else {
         alert("No record found. Please register!");
         this.form.reset();
       }
-    });
-  
+    }); 
   }
-
-  
-
 }
