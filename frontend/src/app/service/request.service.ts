@@ -7,8 +7,9 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class RequestService {
-  private loginUrl: string = "login";
-  private registerUrl: string = "register";
+  private loginUrl: string = "/user/login";
+  private registerUrl: string = "/user/register";
+  private otpUrl: string = "/user/otp";
 
 
   constructor(private http: HttpClient) { }
@@ -19,5 +20,9 @@ export class RequestService {
 
   register(data: any): Observable<any>{
     return this.http.post(environment.REQUEST_HOME + this.registerUrl, data);
+  }
+
+  getOTP(data: any): Observable<any>{
+    return this.http.post(environment.REQUEST_HOME + this.otpUrl, data);
   }
 }

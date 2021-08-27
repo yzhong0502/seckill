@@ -19,12 +19,15 @@ import { RequestService } from '../service/request.service';
 export class RegisterComponent implements OnInit {
   form: FormGroup = this.fb.group({
     name:[null, [Validators.required, Validators.pattern("[0-9a-zA-Z]*")]],
-    phone:[null, [Validators.required, Validators.pattern("[0-9]*")]],
+    telphone:[null, [Validators.required, Validators.pattern("[0-9]*")]],
     gender:[null],
     age:[null, Validators.min(0)],
     address:[null, Validators.required],
     password:[null, Validators.required]
   });
+
+  verified: boolean = false;
+  getOtp: boolean = false;
 
   constructor(private fb : FormBuilder, private service: RequestService, private router:Router) {
   }
@@ -42,5 +45,19 @@ export class RegisterComponent implements OnInit {
         this.form.reset();
       }
     }); 
+  }
+
+  getOTP() {   
+    this.service.getOTP({
+      telphone: this.form.controls['telphone'].value
+    }).subscribe(response=>{
+      if (response.status==='success') {
+        this.getOtp = true;
+        alert("OTP sent. Please check your cellphone.");
+        this.verified = true;
+      } else {
+        alert("Unknown error!");
+      }
+    })
   }
 }

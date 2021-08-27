@@ -14,6 +14,7 @@ import java.util.Random;
 
 @RestController("user")
 @RequestMapping("/user")
+@CrossOrigin
 public class UserController extends BaseController {
     private UserServiceImpl userService;
     private HttpServletRequest httpServletRequest;

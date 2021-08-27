@@ -5,7 +5,37 @@
           <mat-card-title></mat-card-title>
         </mat-card-header>
         <mat-card-content>
-                  
+
+            <div class="row" *ngIf="!verified">
+                <div class="col">
+                  <mat-form-field class="full-width">
+                    <input matInput placeholder="Phone Number" formControlName="telphone">
+                    <mat-error *ngIf="form.controls['telphone'].hasError('required')">
+                      Phone number is <strong>required</strong>
+                    </mat-error>
+                    <mat-error *ngIf="form.controls['telphone'].hasError('pattern')">
+                      Phone number can only contains <strong>numbers</strong>
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+            </div>
+            <div class="row" *ngIf="verified">
+                <div class="col">
+                  <mat-form-field class="full-width">
+                    {{form.controls['telphone'].value}}
+                  </mat-form-field>
+                </div>
+            </div>
+
+
+            <div class="row" *ngIf="!verified && !getOtp">
+                <div class="col">
+                    <button mat-raised-button color="primary" (click)="getOTP()">Get OTP code</button>
+                </div>
+              </div>
+        
+        <div *ngIf="verified">
+
           <div class="row">
             <div class="col">
               <mat-form-field class="full-width">
@@ -20,19 +50,7 @@
             </div>
           </div>
   
-          <div class="row">
-            <div class="col">
-              <mat-form-field class="full-width">
-                <input matInput placeholder="Phone Number" formControlName="phone">
-                <mat-error *ngIf="form.controls['phone'].hasError('required')">
-                  Phone number is <strong>required</strong>
-                </mat-error>
-                <mat-error *ngIf="form.controls['phone'].hasError('pattern')">
-                  Phone number can only contains <strong>numbers</strong>
-                </mat-error>
-              </mat-form-field>
-            </div>
-          </div>
+
           <div class="row">
               <div class="col">
                   <mat-form-field class="full-width">
@@ -74,10 +92,13 @@
               </mat-form-field>
             </div>
         </div> 
+    </div>
+
         </mat-card-content>
-        <mat-card-actions class='center'>
+        <mat-card-actions *ngIf='verified' class='center'>
           <button mat-raised-button color="primary" type="submit" [disabled]='form.invalid'>Register</button>
         </mat-card-actions>
+        
       </mat-card>
     </form>
 
