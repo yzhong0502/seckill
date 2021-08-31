@@ -18,6 +18,13 @@ public class UserModel {
 
     private String encryptedPassword;
 
+    public void setEncryptedPassword(String encryptedPassword) {
+        this.encryptedPassword = encryptedPassword;
+    }
+
+    public String getEncryptedPassword() {
+        return this.encryptedPassword;
+    }
 
     public Integer getId() {
         return id;

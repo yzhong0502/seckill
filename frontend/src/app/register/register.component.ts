@@ -17,9 +17,14 @@ import { RequestService } from '../service/request.service';
   styleUrls: ['./register.component.css']
 })
 export class RegisterComponent implements OnInit {
+  veriform: FormGroup = this.fb.group({
+    otp:[null, [Validators.required, Validators.pattern("[0-9]*")]]
+  });
+  teleform: FormGroup = this.fb.group({
+    telphone:[null, [Validators.required, Validators.pattern("[0-9]*")]]
+  });
   form: FormGroup = this.fb.group({
     name:[null, [Validators.required, Validators.pattern("[0-9a-zA-Z]*")]],
-    telphone:[null, [Validators.required, Validators.pattern("[0-9]*")]],
     gender:[null],
     age:[null, Validators.min(0)],
     address:[null, Validators.required],
@@ -27,7 +32,8 @@ export class RegisterComponent implements OnInit {
   });
 
   verified: boolean = false;
-  getOtp: boolean = false;
+  sentOtp: boolean = false;
+  telephone: string = "";
 
   constructor(private fb : FormBuilder, private service: RequestService, private router:Router) {
   }
@@ -48,13 +54,31 @@ export class RegisterComponent implements OnInit {
   }
 
   getOTP() {   
+    console.log(this.teleform.controls['telphone'].value);
     this.service.getOTP({
-      telphone: this.form.controls['telphone'].value
+      telphone: this.teleform.controls['telphone'].value
     }).subscribe(response=>{
+      console.log(response);
       if (response.status==='success') {
-        this.getOtp = true;
+        this.sentOtp = true;
+        this.telephone = this.teleform.controls['telphone'].value;
         alert("OTP sent. Please check your cellphone.");
+      } else {
+        alert("Unknown error!");
+      }
+    })
+  }
+
+  verify(otp: string) {
+    console.log(otp);
+    this.service.verify({
+      telphone: this.telephone,
+      otp: otp
+    }).subscribe(response=>{
+      console.log(response);
+      if (response.status==='success') {
         this.verified = true;
+        alert("OTP verified, please fill info to register!");
       } else {
         alert("Unknown error!");
       }
