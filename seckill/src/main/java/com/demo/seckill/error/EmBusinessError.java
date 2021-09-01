@@ -1,12 +1,13 @@
 package com.demo.seckill.error;
 
 public enum EmBusinessError implements CommonError {
-    //通用错误类型00001
+    //通用错误类型10000
     PARAMETER_VALIDATION_ERROR(10001, "PARAMETER NOT VALID"),
     UNKNOWN_ERROR(10002, "UNKNOWN ERROR"),
 
-    //10000开头为用户信息相关错误定义
-    USER_NOT_EXIST(20001, "USER NOT EXIST")
+    //20000开头为用户信息相关错误定义
+    USER_NOT_EXIST(20001, "USER NOT EXIST"),
+    USER_LOGIN_FAIL(20002, "PASSWORD INVALID")
     ;
 
     private int errCode;

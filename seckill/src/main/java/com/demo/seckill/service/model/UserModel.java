@@ -1,19 +1,28 @@
 package com.demo.seckill.service.model;
 
+import org.apache.tomcat.util.security.MD5Encoder;
+
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+
 //核心领域模型
 public class UserModel {
     private Integer id;
-
+    @NotBlank(message="Name can't be empty!")
     private String name;
 
     private Byte gender;
-
+    @NotNull(message = "Must input age!")
+    @Min(value=1, message="Age must be greater than 0")
+    @Max(value=149, message="Age must be less than 150")
     private Integer age;
-
+    @NotBlank(message="Must input telephone!")
     private String telphone;
-
+    @NotBlank(message = "Must input register mode!")
     private String registerMode;
-
+    @NotBlank(message = "Must input address!")
     private String address;
 
     private String encryptedPassword;
@@ -84,5 +93,20 @@ public class UserModel {
 
 
     public void setEncryptPassword(String encryptPassword) {
+        this.encryptedPassword = encryptPassword;
+    }
+
+    @Override
+    public String toString() {
+        return "UserModel{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", gender=" + gender +
+                ", age=" + age +
+                ", telphone='" + telphone + '\'' +
+                ", registerMode='" + registerMode + '\'' +
+                ", address='" + address + '\'' +
+                ", encryptedPassword='" + encryptedPassword + '\'' +
+                '}';
     }
 }

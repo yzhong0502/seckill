@@ -8,22 +8,33 @@ import com.demo.seckill.repository.UserCreDOMapper;
 import com.demo.seckill.repository.UserDOMapper;
 import com.demo.seckill.service.UserService;
 import com.demo.seckill.service.model.UserModel;
+import com.demo.seckill.validator.ValidationResult;
+import com.demo.seckill.validator.ValidatorImp;
+import com.mysql.cj.protocol.Message;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import sun.misc.BASE64Encoder;
+
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 
 @Service
 public class UserServiceImpl implements UserService {
 
     private UserDOMapper userDOMapper;
     private UserCreDOMapper userCreDOMapper;
+    private ValidatorImp validator;
 
     @Autowired
-    public UserServiceImpl(UserDOMapper userDOMapper, UserCreDOMapper userCreDOMapper) {
+    public UserServiceImpl(UserDOMapper userDOMapper, UserCreDOMapper userCreDOMapper, ValidatorImp validator) {
         this.userCreDOMapper = userCreDOMapper;
         this.userDOMapper = userDOMapper;
+        this.validator = validator;
     }
 
     @Override
@@ -36,21 +47,30 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public void register(UserModel userModel) throws BusinessException{
+    public void register(UserModel userModel) throws BusinessException {
         if (userModel == null) {
             throw new BusinessException(EmBusinessError.PARAMETER_VALIDATION_ERROR);
         }
-        if (StringUtils.isEmpty(userModel.getName())
-            || userModel.getGender() == null
-            || userModel.getAge() == null
-            || StringUtils.isEmpty(userModel.getAddress())
-            || StringUtils.isEmpty(userModel.getTelphone())) {
-            throw new BusinessException(EmBusinessError.PARAMETER_VALIDATION_ERROR);
+        ValidationResult result = validator.validate(userModel);
+        if (result.isHasErrors()) {
+            throw new BusinessException(EmBusinessError.PARAMETER_VALIDATION_ERROR, result.getErrMsg());
         }
         UserDO userDO = this.convertFromModel(userModel);
-        int id = this.userDOMapper.insertSelective(userDO);
+        try {
+            this.userDOMapper.insertSelective(userDO);
+        } catch (DuplicateKeyException e) {
+            throw new BusinessException(EmBusinessError.PARAMETER_VALIDATION_ERROR,"Telephone already exists!");
+        }
 
-
+        userModel.setId(userDO.getId());
+        if (StringUtils.isEmpty(userModel.getEncryptedPassword()) || userModel.getId() == null) {
+            throw new BusinessException(EmBusinessError.PARAMETER_VALIDATION_ERROR);
+        }
+        try {
+            userModel.setEncryptedPassword(encodeByMD5(userModel.getEncryptedPassword()));
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
         UserCreDO userCreDO = this.convertCreFromModel(userModel);
         this.userCreDOMapper.insert(userCreDO);
 
@@ -58,9 +78,37 @@ public class UserServiceImpl implements UserService {
 
     }
 
-    @Override
-    public void login(String telphone, String password) {
+    public String encodeByMD5(String str) throws NoSuchAlgorithmException {
+        MessageDigest md5 = MessageDigest.getInstance("MD5");
+        BASE64Encoder base64Encoder = new BASE64Encoder();
+        String encrypted = base64Encoder.encode(md5.digest(str.getBytes(StandardCharsets.UTF_8)));
+        return encrypted;
+    }
 
+    @Override
+    public void login(String telphone, String password) throws BusinessException {
+        if (StringUtils.isEmpty(telphone) || StringUtils.isEmpty(password)) {
+            throw new BusinessException(EmBusinessError.PARAMETER_VALIDATION_ERROR);
+        }
+        validateLogin(telphone, password);
+        //login successfull, save token somewhere
+
+    }
+
+    @Override
+    public void validateLogin(String telphone, String password) throws BusinessException {
+        UserDO userDO = this.userDOMapper.selectByTelphone(telphone);
+        if (userDO == null) {
+            throw new BusinessException(EmBusinessError.USER_NOT_EXIST);
+        }
+        UserCreDO userCreDO = this.userCreDOMapper.selectByUserId(userDO.getId());
+        try {
+            if (!StringUtils.equals(userCreDO.getEncryptPassword(), encodeByMD5(password))) {
+                throw new BusinessException(EmBusinessError.USER_LOGIN_FAIL);
+            }
+        } catch (NoSuchAlgorithmException e) {
+            throw new BusinessException(EmBusinessError.USER_LOGIN_FAIL);
+        }
     }
 
     private UserModel convertFromDataObject(UserDO userDO, UserCreDO userCreDO) {

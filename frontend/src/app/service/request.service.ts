@@ -16,10 +16,12 @@ export class RequestService {
   constructor(private http: HttpClient) { }
 
   login(data: any): Observable<any>{
+    console.log(data);
     return this.http.post(environment.REQUEST_HOME + this.loginUrl, data);
   }
 
   register(data: any): Observable<any>{
+    console.log(data);
     return this.http.post(environment.REQUEST_HOME + this.registerUrl, data);
   }
 

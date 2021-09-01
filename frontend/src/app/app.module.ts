@@ -14,13 +14,15 @@ import { LoginComponent } from './login/login.component';
 import { HttpClientModule } from '@angular/common/http';
 import { RegisterComponent } from './register/register.component';
 import { TabComponent } from './tab/tab.component';
+import { SeckillComponent } from './seckill/seckill.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
     RegisterComponent,
-    TabComponent
+    TabComponent,
+    SeckillComponent
   ],
   imports: [
     BrowserModule,

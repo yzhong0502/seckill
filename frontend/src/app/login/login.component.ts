@@ -31,10 +31,12 @@ export class LoginComponent implements OnInit {
   login(): void {
     console.log(this.form.value);
     this.service.login(this.form.value).subscribe(response=>{
+      console.log(response);
       if (response.status==='success') {
+        alert("Successfully logged in!");
         this.router.navigateByUrl('/seckill');
       } else {
-        alert("No record found. Please register!");
+        alert("Login failed!");
         this.form.reset();
       }
     });

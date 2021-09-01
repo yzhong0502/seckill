@@ -43,12 +43,21 @@ export class RegisterComponent implements OnInit {
 
   register(): void {
     console.log(this.form.value);
-    this.service.register(this.form.value).subscribe(response=>{
+    this.service.register({
+      name: this.form.controls['name'].value,
+      gender: this.form.controls['gender'].value,
+      age: this.form.controls['age'].value,
+      address: this.form.controls['address'].value,
+      encryptedPassword: this.form.controls['password'].value,
+      registerMode: "telephone",
+      telphone:this.telephone
+    }).subscribe(response=>{
+      console.log(response);
       if (response.status==='success') {
+        alert("Successfully registered!");
         this.router.navigateByUrl('/seckill');
       } else {
-        alert("No record found. Please register!");
-        this.form.reset();
+        alert("Register failed!");
       }
     }); 
   }
