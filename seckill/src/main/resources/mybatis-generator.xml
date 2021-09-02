@@ -84,6 +84,21 @@
                enableSelectByExample="false"
                selectByExampleQueryId="false"
         />
+
+        <table schema="" tableName="item" domainObjectName="ItemDO"
+               enableCountByExample="false"
+               enableDeleteByExample="false"
+               enableUpdateByExample="false"
+               enableSelectByExample="false"
+               selectByExampleQueryId="false"
+        />
+        <table schema="" tableName="item_stock" domainObjectName="ItemStockDO"
+               enableCountByExample="false"
+               enableDeleteByExample="false"
+               enableUpdateByExample="false"
+               enableSelectByExample="false"
+               selectByExampleQueryId="false"
+        />
     </context>
 </generatorConfiguration>
 

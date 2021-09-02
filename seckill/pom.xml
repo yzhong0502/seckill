@@ -106,7 +106,7 @@
 				<configuration>
 					<!--允许移动生成的文件-->
 					<verbose>true</verbose>
-					<overwrite>true</overwrite>
+					<overwrite>false</overwrite>
 					<configurationFile>
 						<!--generator配置文件路径-->
 						src/main/resources/mybatis-generator.xml
