@@ -48,9 +48,6 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public void register(UserModel userModel) throws BusinessException {
-        if (userModel == null) {
-            throw new BusinessException(EmBusinessError.PARAMETER_VALIDATION_ERROR);
-        }
         ValidationResult result = validator.validate(userModel);
         if (result.isHasErrors()) {
             throw new BusinessException(EmBusinessError.PARAMETER_VALIDATION_ERROR, result.getErrMsg());
@@ -72,7 +69,7 @@ public class UserServiceImpl implements UserService {
             e.printStackTrace();
         }
         UserCreDO userCreDO = this.convertCreFromModel(userModel);
-        this.userCreDOMapper.insert(userCreDO);
+        this.userCreDOMapper.insertSelective(userCreDO);
 
         return;
 

@@ -6,6 +6,11 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
 import { MatInputModule } from '@angular/material/input';
 import { MatTabsModule } from '@angular/material/tabs';
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatIconModule } from '@angular/material/icon';
+import { LayoutModule } from '@angular/cdk/layout';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatListModule } from '@angular/material/list';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -15,6 +20,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { RegisterComponent } from './register/register.component';
 import { TabComponent } from './tab/tab.component';
 import { SeckillComponent } from './seckill/seckill.component';
+
 
 @NgModule({
   declarations: [
@@ -34,7 +40,12 @@ import { SeckillComponent } from './seckill/seckill.component';
     MatCardModule,
     MatInputModule,
     HttpClientModule,
-    MatTabsModule
+    MatTabsModule,
+    MatSidenavModule,
+    MatIconModule,
+    LayoutModule,
+    MatToolbarModule,
+    MatListModule
   ],
   providers: [],
   bootstrap: [AppComponent]

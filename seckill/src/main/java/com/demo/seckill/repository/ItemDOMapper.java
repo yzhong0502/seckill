@@ -1,7 +1,9 @@
 package com.demo.seckill.repository;
 
 import com.demo.seckill.entity.ItemDO;
+import org.apache.ibatis.annotations.Mapper;
 
+@Mapper
 public interface ItemDOMapper {
     int deleteByPrimaryKey(Integer id);
 

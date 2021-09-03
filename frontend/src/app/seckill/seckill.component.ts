@@ -1,15 +1,21 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
+import { Observable } from 'rxjs';
+import { map, shareReplay } from 'rxjs/operators';
 
 @Component({
   selector: 'app-seckill',
   templateUrl: './seckill.component.html',
   styleUrls: ['./seckill.component.css']
 })
-export class SeckillComponent implements OnInit {
+export class SeckillComponent {
 
-  constructor() { }
+  isHandset$: Observable<boolean> = this.breakpointObserver.observe(Breakpoints.Handset)
+    .pipe(
+      map(result => result.matches),
+      shareReplay()
+    );
 
-  ngOnInit(): void {
-  }
+  constructor(private breakpointObserver: BreakpointObserver) {}
 
 }
