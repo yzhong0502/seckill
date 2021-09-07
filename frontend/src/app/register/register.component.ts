@@ -57,7 +57,7 @@ export class RegisterComponent implements OnInit {
         alert("Successfully registered!");
         this.router.navigateByUrl('/seckill');
       } else {
-        alert("Register failed!");
+        alert("Register failed! "+ response.data.errMsg);
       }
     }); 
   }
@@ -73,7 +73,7 @@ export class RegisterComponent implements OnInit {
         this.telephone = this.teleform.controls['telphone'].value;
         alert("OTP sent. Please check your cellphone.");
       } else {
-        alert("Unknown error!");
+        alert("Unknown error! "+ response.data.errMsg);
       }
     })
   }
@@ -89,7 +89,7 @@ export class RegisterComponent implements OnInit {
         this.verified = true;
         alert("OTP verified, please fill info to register!");
       } else {
-        alert("Unknown error!");
+        alert("Unknown error! "+ response.data.errMsg);
       }
     })
   }

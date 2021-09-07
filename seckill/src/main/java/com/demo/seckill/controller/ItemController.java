@@ -8,6 +8,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @RestController("item")
@@ -26,8 +27,11 @@ public class ItemController extends BaseController {
         return null;
     }
 
-    @PostMapping("/new")
-    public CommonReturnType createItem(@RequestBody ItemModel itemModel) throws BusinessException {
+    @PostMapping("/create")
+    public CommonReturnType createItem(@RequestBody ItemModel itemModel, @RequestParam double price) throws BusinessException {
+        System.out.println(itemModel.toString());
+        itemModel.setSales(0);
+        itemModel.setPrice(new BigDecimal(price));
         ItemModel item= this.itemServiceImp.createItem(itemModel);
         return CommonReturnType.create(this.convertFromModel(item));
     }
@@ -36,6 +40,7 @@ public class ItemController extends BaseController {
         if (itemModel == null) return null;
         ItemVO itemVO = new ItemVO();
         BeanUtils.copyProperties(itemModel, itemVO);
+        System.out.println(itemVO.toString());
         return itemVO;
     }
 

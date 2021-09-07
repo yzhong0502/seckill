@@ -36,7 +36,7 @@ export class LoginComponent implements OnInit {
         alert("Successfully logged in!");
         this.router.navigateByUrl('/seckill');
       } else {
-        alert("Login failed!");
+        alert("Login failed! "+ response.data.errMsg);
         this.form.reset();
       }
     });

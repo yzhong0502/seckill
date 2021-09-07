@@ -20,6 +20,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { RegisterComponent } from './register/register.component';
 import { TabComponent } from './tab/tab.component';
 import { SeckillComponent } from './seckill/seckill.component';
+import { AddItemComponent } from './add-item/add-item.component';
 
 
 @NgModule({
@@ -28,7 +29,8 @@ import { SeckillComponent } from './seckill/seckill.component';
     LoginComponent,
     RegisterComponent,
     TabComponent,
-    SeckillComponent
+    SeckillComponent,
+    AddItemComponent
   ],
   imports: [
     BrowserModule,

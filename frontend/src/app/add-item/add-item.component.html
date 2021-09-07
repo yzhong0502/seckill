@@ -1,0 +1,75 @@
+<form [formGroup]="form" novalidate (ngSubmit)="add()">
+  <mat-card class="card">
+    <mat-card-header>
+      <mat-card-title>Add Item</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+    
+
+
+      <div class="row">
+        <div class="col">
+          <mat-form-field class="full-width">
+            <input matInput placeholder="Title" formControlName="title">
+            <mat-error *ngIf="form.controls['title'].hasError('required')">
+              Title is <strong>required</strong>
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col">
+          <mat-form-field class="full-width">
+            <input matInput type="number" step="0.01" placeholder="Price" formControlName="price">
+            <mat-error *ngIf="form.controls['price'].hasError('required')">
+              Price is <strong>required</strong>
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col">
+          <mat-form-field class="full-width">
+            <input matInput type="number" placeholder="Stock" formControlName="stock">
+            <mat-error *ngIf="form.controls['stock'].hasError('required')">
+              Stock is <strong>required</strong>
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col">
+          <mat-form-field class="full-width">
+            <input matInput placeholder="Description" formControlName="description">
+            <mat-error *ngIf="form.controls['description'].hasError('required')">
+              Description is <strong>required</strong>
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col">
+          <mat-form-field class="full-width">
+            <input matInput type="url" placeholder="Image URL" formControlName="imgUrl">
+            <mat-error *ngIf="form.controls['imgUrl'].hasError('required')">
+              Image URL is <strong>required</strong>
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+
+
+
+
+
+    </mat-card-content>
+    <mat-card-actions>
+      <button mat-raised-button color="primary" [disabled]='form.invalid' type="submit">Create</button>
+    </mat-card-actions>
+    
+  </mat-card>
+</form>

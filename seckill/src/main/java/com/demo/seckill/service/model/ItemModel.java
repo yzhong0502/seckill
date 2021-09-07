@@ -1,24 +1,30 @@
 package com.demo.seckill.service.model;
 
 import javax.validation.constraints.Min;
-import javax.validation.constraints.NotBlank;
+import org.hibernate.validator.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 
 public class ItemModel {
 
     private Integer id;
+
     @NotBlank(message="Title can't blank")
     private String title;
+
     @NotNull(message="price can't be null")
     @Min(value=0, message="price must be above 0")
     private BigDecimal price;//用BigDecimal避免精度问题，与DO类型不同需要手动设置
+
     @NotNull(message="stock can't be null")
     @Min(value=0, message="stock must be above 0")
     private Integer stock;
+
     @NotBlank(message = "description can't be blank")
     private String description;
+
     private Integer sales;
+
     @NotBlank(message="must have image Url")
     private String imgUrl;
 
