@@ -17,7 +17,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class ItemServiceImp implements ItemService {
@@ -60,7 +62,12 @@ public class ItemServiceImp implements ItemService {
 
     @Override
     public List<ItemModel> listItem() {
-        return null;
+        List<ItemDO> list = this.itemDOMapper.selectAll();
+        List<ItemModel> itemModelList = list.stream().map(itemDO -> {
+            ItemStockDO itemStockDO = this.itemStockDOMapper.selectByItemId(itemDO.getId());
+            return this.convertFromDataObject(itemDO, itemStockDO);
+        }).collect(Collectors.toList());
+        return itemModelList;
     }
 
     @Override //read doesn't need roll back so no need @Transactional
@@ -69,6 +76,11 @@ public class ItemServiceImp implements ItemService {
         if (itemDO == null) return null;
         ItemStockDO itemStockDO = this.itemStockDOMapper.selectByItemId(id);
         return this.convertFromDataObject(itemDO, itemStockDO);
+    }
+
+    @Override
+    public void updateStock(Integer itemId) {
+
     }
 
     private ItemDO convertFromModelToItem(ItemModel itemModel) {

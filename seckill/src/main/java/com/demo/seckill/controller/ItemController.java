@@ -1,15 +1,20 @@
 package com.demo.seckill.controller;
 
+import com.demo.seckill.entity.ItemStockDO;
 import com.demo.seckill.error.BusinessException;
+import com.demo.seckill.error.EmBusinessError;
 import com.demo.seckill.response.CommonReturnType;
 import com.demo.seckill.service.impl.ItemServiceImp;
 import com.demo.seckill.service.model.ItemModel;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController("item")
 @RequestMapping("/item")
@@ -24,7 +29,31 @@ public class ItemController extends BaseController {
 
     @GetMapping("/all")
     public CommonReturnType getAllItems() {
-        return null;
+        List<ItemModel> itemModelList = this.itemServiceImp.listItem();
+        List<ItemVO> list = itemModelList.stream().map(itemModel -> {
+            return this.convertFromModel(itemModel);
+        }).collect(Collectors.toList());
+        return CommonReturnType.create(list);
+    }
+
+    @GetMapping("/get/{id}")
+    public CommonReturnType getItem(@PathVariable Integer id) {
+        ItemModel itemModel = this.itemServiceImp.getItemById(id);
+        return CommonReturnType.create(this.convertFromModel(itemModel));
+    }
+
+    @GetMapping("/buy")
+    @Transactional
+    public CommonReturnType buyItem(@RequestParam Integer id) throws BusinessException{
+        //check stock
+        ItemModel itemModel = this.itemServiceImp.getItemById(id);
+        if (itemModel.getStock() <= 0) {
+            throw new BusinessException(EmBusinessError.ITEM_STOCK_NOT_ENOUGH);
+        }
+        ItemStockDO itemStockDO = new ItemStockDO();
+        itemStockDO.setItemId(itemModel.getId());
+        itemStockDO.setStock(itemModel.getStock() - 1);
+        return CommonReturnType.create(null);
     }
 
     @PostMapping("/create")

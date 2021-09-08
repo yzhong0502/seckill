@@ -15,6 +15,8 @@ public interface ItemStockDOMapper {
 
     ItemStockDO selectByItemId(Integer itemId);
 
+    void updateStockByItemId(ItemStockDO record);
+
     int updateByPrimaryKeySelective(ItemStockDO record);
 
     int updateByPrimaryKey(ItemStockDO record);

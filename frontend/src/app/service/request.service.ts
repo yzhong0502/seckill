@@ -14,6 +14,8 @@ export class RequestService {
   private verifyUrl: string = "/user/verify";
 
   private addItemUrl: string = "/item/create";
+  private allItemUrl: string = "/item/all";
+  private buyItemUrl: string = "/item/buy";
 
 
   constructor(private http: HttpClient) { }
@@ -45,5 +47,14 @@ export class RequestService {
 
   errorHandler(error : HttpErrorResponse) {
     return throwError(error.message);
+  }
+
+  getAll(): Observable<any> {
+    return this.http.get(environment.REQUEST_HOME + this.allItemUrl);
+  }
+
+  buyItem(id: any): Observable<any> {
+    console.log(id);
+    return this.http.get(environment.REQUEST_HOME + this.buyItemUrl + "?id=" + id);
   }
 }

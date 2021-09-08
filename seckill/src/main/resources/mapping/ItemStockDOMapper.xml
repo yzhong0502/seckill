@@ -74,4 +74,9 @@
       item_id = #{itemId,jdbcType=INTEGER}
     where id = #{id,jdbcType=INTEGER}
   </update>
+  <update id="updateStockByItemId" parameterType="com.demo.seckill.entity.ItemStockDO">
+    update item_stock
+    set stock = #{stock,jdbcType=INTEGER}
+    where item_id = #{itemId,jdbcType=INTEGER}
+  </update>
 </mapper>

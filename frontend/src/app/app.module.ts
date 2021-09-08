@@ -21,6 +21,7 @@ import { RegisterComponent } from './register/register.component';
 import { TabComponent } from './tab/tab.component';
 import { SeckillComponent } from './seckill/seckill.component';
 import { AddItemComponent } from './add-item/add-item.component';
+import { ShoppingListComponent } from './shopping-list/shopping-list.component';
 
 
 @NgModule({
@@ -30,7 +31,8 @@ import { AddItemComponent } from './add-item/add-item.component';
     RegisterComponent,
     TabComponent,
     SeckillComponent,
-    AddItemComponent
+    AddItemComponent,
+    ShoppingListComponent
   ],
   imports: [
     BrowserModule,

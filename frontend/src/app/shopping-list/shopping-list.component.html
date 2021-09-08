@@ -1,0 +1,33 @@
+
+    <mat-card *ngFor="let item of itemList" class="item-card">
+        <mat-card-content>
+        <div class="row">
+            <div class="col">
+                    <img width="200 px" height="200 px" src="{{item.imgUrl}}">
+                    <table>
+                        <tr>
+                            <td>{{item.title}}</td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>sales: {{item.sales}}</td>
+                            <td>stock: {{item.stock}}</td>
+                        </tr>
+                        <tr>
+                            <td>{{item.description}}</td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>{{item.price | currency}}</td>
+                            <td><button mat-raised-button color="primary" onclick="buy(item.id)">Buy</button>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                </div>
+
+        </mat-card-content>
+
+        <mat-card-actions class='center'>
+            </mat-card-actions>
+    </mat-card>

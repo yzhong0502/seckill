@@ -11,4 +11,6 @@ public interface ItemService {
     List<ItemModel> listItem();
 
     ItemModel getItemById(Integer id);
+
+    void updateStock(Integer itemId);
 }
