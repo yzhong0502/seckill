@@ -10,7 +10,7 @@
     id, stock, item_id
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
-    select 
+    select
     <include refid="Base_Column_List" />
     from item_stock
     where id = #{id,jdbcType=INTEGER}
@@ -74,7 +74,7 @@
       item_id = #{itemId,jdbcType=INTEGER}
     where id = #{id,jdbcType=INTEGER}
   </update>
-  <update id="updateStockByItemId" parameterType="com.demo.seckill.entity.ItemStockDO">
+  <update id="updateStock" parameterType="com.demo.seckill.entity.ItemStockDO">
     update item_stock
     set stock = #{stock,jdbcType=INTEGER}
     where item_id = #{itemId,jdbcType=INTEGER}

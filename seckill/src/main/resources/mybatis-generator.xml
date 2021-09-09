@@ -99,6 +99,14 @@
                enableSelectByExample="false"
                selectByExampleQueryId="false"
         />
+
+        <table schema="" tableName="item_order" domainObjectName="OrderDO"
+               enableCountByExample="false"
+               enableDeleteByExample="false"
+               enableUpdateByExample="false"
+               enableSelectByExample="false"
+               selectByExampleQueryId="false"
+        />
     </context>
 </generatorConfiguration>
 

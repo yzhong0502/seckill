@@ -1,34 +1,14 @@
-package com.demo.seckill.service.model;
+package com.demo.seckill.controller;
 
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 
-//用户下单的交易模型
-public class OrderModel {
-    //订单号有严格格式用String
-    @NotBlank
+public class OrderVO {
     private String id;
-    @NotNull
     private Integer userId;
-    @NotNull
     private Integer itemId;
-    @NotNull
-    @Min(1)
     private Integer amount;
-    @NotNull
     private BigDecimal itemPrice;
-    @NotNull
     private BigDecimal orderPrice;//total price = itemPrice * amount
-
-    public BigDecimal getItemPrice() {
-        return itemPrice;
-    }
-
-    public void setItemPrice(BigDecimal itemPrice) {
-        this.itemPrice = itemPrice;
-    }
 
     public String getId() {
         return id;
@@ -60,6 +40,14 @@ public class OrderModel {
 
     public void setAmount(Integer amount) {
         this.amount = amount;
+    }
+
+    public BigDecimal getItemPrice() {
+        return itemPrice;
+    }
+
+    public void setItemPrice(BigDecimal itemPrice) {
+        this.itemPrice = itemPrice;
     }
 
     public BigDecimal getOrderPrice() {

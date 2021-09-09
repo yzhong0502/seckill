@@ -13,7 +13,7 @@
     id, title, price, description, sales, img_url
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
-    select 
+    select
     <include refid="Base_Column_List" />
     from item
     where id = #{id,jdbcType=INTEGER}
@@ -28,14 +28,14 @@
     where id = #{id,jdbcType=INTEGER}
   </delete>
   <insert id="insert" parameterType="com.demo.seckill.entity.ItemDO">
-    insert into item (id, title, price, 
+    insert into item (id, title, price,
       description, sales, img_url
       )
-    values (#{id,jdbcType=INTEGER}, #{title,jdbcType=VARCHAR}, #{price,jdbcType=DOUBLE}, 
+    values (#{id,jdbcType=INTEGER}, #{title,jdbcType=VARCHAR}, #{price,jdbcType=DOUBLE},
       #{description,jdbcType=VARCHAR}, #{sales,jdbcType=INTEGER}, #{imgUrl,jdbcType=VARCHAR}
       )
   </insert>
-  <insert id="insertSelective" parameterType="com.demo.seckill.entity.ItemDO" keyProperty="id" useGeneratedKeys="true">
+  <insert id="insertSelective" keyProperty="id" parameterType="com.demo.seckill.entity.ItemDO" useGeneratedKeys="true">
     insert into item
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">

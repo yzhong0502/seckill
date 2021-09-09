@@ -10,7 +10,10 @@ public enum EmBusinessError implements CommonError {
     USER_LOGIN_FAIL(20002, "PASSWORD INVALID"),
 
     //30000开头为item相关错误定义
-    ITEM_STOCK_NOT_ENOUGH(30001, "Item stock not enough")
+    ITEM_STOCK_NOT_ENOUGH(30001, "Item stock not enough"),
+    ORDER_NOT_FOUND(30002,"Order not found"),
+    ITEM_NOT_FOUND(30003, "Item not found")
+
     ;
 
     private int errCode;
