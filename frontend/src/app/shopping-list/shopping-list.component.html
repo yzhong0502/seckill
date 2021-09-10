@@ -1,5 +1,5 @@
-
-    <mat-card *ngFor="let item of itemList" class="item-card">
+<form #f="ngForm" name="f">
+    <mat-card *ngFor="let item of itemList; index as i" class="item-card">
         <mat-card-content>
         <div class="row">
             <div class="col">
@@ -15,11 +15,14 @@
                         </tr>
                         <tr>
                             <td>{{item.description}}</td>
-                            <td></td>
+                            <td>
+                                <label for="amount_{{i}}">Amount: </label>
+                                <input type="number" id="amount_{{i}}" name="amount_{{i}}" [(ngModel)]="amountList[i]" ngModel required min="1" max="99" value="1">
+                            </td>
                         </tr>
                         <tr>
                             <td>{{item.price | currency}}</td>
-                            <td><button mat-raised-button color="primary" onclick="buy(item.id)">Buy</button>
+                            <td><button type="button" (click)="buy(i)">Buy</button>
                             </td>
                         </tr>
                     </table>
@@ -31,3 +34,4 @@
         <mat-card-actions class='center'>
             </mat-card-actions>
     </mat-card>
+</form>

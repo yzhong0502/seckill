@@ -61,9 +61,7 @@
             <property name="enableSubPackages" value="true"/>
         </javaClientGenerator>
 
-        <!-- Specify database table -->
-        <!-- <table schema="" tableName="WECHAT_MESSAGE"/> -->
-
+        <!--
         <table schema="" tableName="user_info" domainObjectName="UserDO"
                enableCountByExample="false"
                enableDeleteByExample="false"
@@ -71,12 +69,7 @@
                enableSelectByExample="false"
                selectByExampleQueryId="false"
         />
-        <!-- Specify all tables in the database  -->
-        <!-- <table schema="" tableName="%"/> -->
-        <!-- Some table fields need to be specified java type
-         <table schema="" tableName="">
-            <columnOverride column="" javaType="" />
-        </table> -->
+
         <table schema="" tableName="user_credentials" domainObjectName="UserCreDO"
                enableCountByExample="false"
                enableDeleteByExample="false"
@@ -101,6 +94,14 @@
         />
 
         <table schema="" tableName="item_order" domainObjectName="OrderDO"
+               enableCountByExample="false"
+               enableDeleteByExample="false"
+               enableUpdateByExample="false"
+               enableSelectByExample="false"
+               selectByExampleQueryId="false"
+        />
+        -->
+        <table schema="" tableName="sequence_info" domainObjectName="SeqDO"
                enableCountByExample="false"
                enableDeleteByExample="false"
                enableUpdateByExample="false"

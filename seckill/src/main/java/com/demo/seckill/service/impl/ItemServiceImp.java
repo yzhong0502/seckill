@@ -81,14 +81,8 @@ public class ItemServiceImp implements ItemService {
     @Override
     @Transactional//多个操作都需要加，查询操作也需要一致
     public boolean decreaseStock(Integer itemId, Integer amount) throws BusinessException {
-        ItemStockDO itemStockDO = this.itemStockDOMapper.selectByItemId(itemId);
-        int stock = itemStockDO.getStock();
-        if (stock >= amount) {
-            itemStockDO.setStock(stock - amount);
-            this.itemStockDOMapper.updateStock(itemStockDO);
-            return true;
-        }
-        return false;
+        int affectedRow = this.itemStockDOMapper.decreaseStock(itemId, amount);
+        return affectedRow > 0;
     }
 
 

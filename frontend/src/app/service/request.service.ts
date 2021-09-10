@@ -15,7 +15,9 @@ export class RequestService {
 
   private addItemUrl: string = "/item/create";
   private allItemUrl: string = "/item/all";
-  private buyItemUrl: string = "/item/buy";
+
+  private buyItemUrl: string = "/order/buy";
+  private cancelOrderUrl: string = "/order/cancel/{id}";
 
 
   constructor(private http: HttpClient) { }
@@ -53,8 +55,7 @@ export class RequestService {
     return this.http.get(environment.REQUEST_HOME + this.allItemUrl);
   }
 
-  buyItem(id: any): Observable<any> {
-    console.log(id);
-    return this.http.get(environment.REQUEST_HOME + this.buyItemUrl + "?id=" + id);
+  buyItem(userId: number, itemId: number, amount: number): Observable<any> {
+    return this.http.get(environment.REQUEST_HOME + this.buyItemUrl + "?userId=" + userId + "&itemId="+itemId+"&amount="+amount);
   }
 }

@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Form } from '@angular/forms';
 import { Router } from '@angular/router';
 import { RequestService } from '../service/request.service';
 
@@ -9,11 +10,15 @@ import { RequestService } from '../service/request.service';
 })
 export class ShoppingListComponent implements OnInit {
   itemList: any[] = [];
+  amountList: any[] = [];
 
   constructor(private service: RequestService, private router: Router) { }
 
   ngOnInit(): void {
     this.getAllItem();
+    for (let i = 0; i < this.itemList.length; ++i) {
+      this.amountList[i] = 1;
+    }
   }
 
   getAllItem(): void {
@@ -26,8 +31,15 @@ export class ShoppingListComponent implements OnInit {
     })
   } 
 
-  buy(id: any) {
-    this.service.buyItem(id).subscribe((response)=>{
+  buy(i: number) {
+    console.log("buying "+i+" for "+this.amountList[i]);
+    let userId = window.localStorage.getItem("userId");
+    if (userId === null) {
+      alert("Error! Can't find user data!");
+      this.router.navigateByUrl("http://localhost:4200/all");
+      return;
+    }
+    this.service.buyItem(parseInt(userId),this.itemList[i].id, this.amountList[i]).subscribe((response)=>{
       if (response.status === "success") {
         alert("Ordered successfully!");
         this.router.navigateByUrl("http://localhost:4200/all");

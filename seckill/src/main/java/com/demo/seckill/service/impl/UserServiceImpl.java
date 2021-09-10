@@ -47,7 +47,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public void register(UserModel userModel) throws BusinessException {
+    public UserModel register(UserModel userModel) throws BusinessException {
         ValidationResult result = validator.validate(userModel);
         if (result.isHasErrors()) {
             throw new BusinessException(EmBusinessError.PARAMETER_VALIDATION_ERROR, result.getErrMsg());
@@ -71,7 +71,7 @@ public class UserServiceImpl implements UserService {
         UserCreDO userCreDO = this.convertCreFromModel(userModel);
         this.userCreDOMapper.insertSelective(userCreDO);
 
-        return;
+        return this.convertFromDataObject(userDO, userCreDO);
 
     }
 
@@ -83,17 +83,17 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void login(String telphone, String password) throws BusinessException {
+    public UserModel login(String telphone, String password) throws BusinessException {
         if (StringUtils.isEmpty(telphone) || StringUtils.isEmpty(password)) {
             throw new BusinessException(EmBusinessError.PARAMETER_VALIDATION_ERROR);
         }
-        validateLogin(telphone, password);
+        return validateLogin(telphone, password);
         //login successfull, save token somewhere
 
     }
 
     @Override
-    public void validateLogin(String telphone, String password) throws BusinessException {
+    public UserModel validateLogin(String telphone, String password) throws BusinessException {
         UserDO userDO = this.userDOMapper.selectByTelphone(telphone);
         if (userDO == null) {
             throw new BusinessException(EmBusinessError.USER_NOT_EXIST);
@@ -106,6 +106,7 @@ public class UserServiceImpl implements UserService {
         } catch (NoSuchAlgorithmException e) {
             throw new BusinessException(EmBusinessError.USER_LOGIN_FAIL);
         }
+        return this.convertFromDataObject(userDO, userCreDO);
     }
 
     private UserModel convertFromDataObject(UserDO userDO, UserCreDO userCreDO) {

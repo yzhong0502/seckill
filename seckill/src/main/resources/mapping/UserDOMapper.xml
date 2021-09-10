@@ -19,6 +19,12 @@
     from user_info
     where id = #{id,jdbcType=INTEGER}
   </select>
+  <select id="selectByTelphone" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from user_info
+    where telphone = #{telphone}
+  </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from user_info
     where id = #{id,jdbcType=INTEGER}

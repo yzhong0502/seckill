@@ -22,8 +22,9 @@ public class OrderController extends BaseController {
         this.orderServiceImp = orderServiceImp;
     }
 
-    @PostMapping("/buy")
+    @GetMapping("/buy")
     public CommonReturnType buyItem(@RequestParam Integer userId, @RequestParam Integer itemId, @RequestParam Integer amount) throws BusinessException {
+        System.out.println(userId+" is buying "+itemId + " for "+amount);
         OrderModel orderModel = this.orderServiceImp.createOrder(userId, itemId, amount);
         return CommonReturnType.create(orderModel);
     }

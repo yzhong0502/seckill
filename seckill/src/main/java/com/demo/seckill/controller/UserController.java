@@ -67,8 +67,8 @@ public class UserController extends BaseController {
     @PostMapping("/register")
     public CommonReturnType register(@RequestBody UserModel userModel) throws BusinessException {
         System.out.println(userModel.toString());
-        this.userService.register(userModel);
-        return CommonReturnType.create(null);
+        userModel = this.userService.register(userModel);
+        return CommonReturnType.create(this.convertFromModelObject(userModel));
     }
 
     private UserVO convertFromModelObject(UserModel userModel) {
@@ -80,8 +80,8 @@ public class UserController extends BaseController {
 
     @PostMapping("/login")
     public CommonReturnType login(@RequestBody Map<String,String> data) throws BusinessException {
-        this.userService.login(data.get("telphone"), data.get("password"));
-        return CommonReturnType.create(null);
+        UserModel userModel = this.userService.login(data.get("telphone"), data.get("password"));
+        return CommonReturnType.create(this.convertFromModelObject(userModel));
     }
 
 }

@@ -55,7 +55,7 @@ export class RegisterComponent implements OnInit {
       console.log(response);
       if (response.status==='success') {
         alert("Successfully registered!");
-        this.router.navigateByUrl('/seckill');
+        this.router.navigateByUrl('/all');
       } else {
         alert("Register failed! "+ response.data.errMsg);
       }

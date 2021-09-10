@@ -33,8 +33,9 @@ export class LoginComponent implements OnInit {
     this.service.login(this.form.value).subscribe(response=>{
       console.log(response);
       if (response.status==='success') {
+        window.localStorage.setItem("userId", response.data.id);
         alert("Successfully logged in!");
-        this.router.navigateByUrl('/seckill');
+        this.router.navigateByUrl('/all');
       } else {
         alert("Login failed! "+ response.data.errMsg);
         this.form.reset();
