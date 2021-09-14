@@ -12,6 +12,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { LayoutModule } from '@angular/cdk/layout';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatListModule } from '@angular/material/list';
+import { CanBuy } from './helper/router-guard';
 
 
 import { AppRoutingModule } from './app-routing.module';
@@ -24,6 +25,7 @@ import { TabComponent } from './tab/tab.component';
 import { SeckillComponent } from './seckill/seckill.component';
 import { AddItemComponent } from './add-item/add-item.component';
 import { ShoppingListComponent } from './shopping-list/shopping-list.component';
+import { HeaderComponent } from './header/header.component';
 
 
 @NgModule({
@@ -34,7 +36,8 @@ import { ShoppingListComponent } from './shopping-list/shopping-list.component';
     TabComponent,
     SeckillComponent,
     AddItemComponent,
-    ShoppingListComponent
+    ShoppingListComponent,
+    HeaderComponent
   ],
   imports: [
     BrowserModule,
@@ -54,7 +57,7 @@ import { ShoppingListComponent } from './shopping-list/shopping-list.component';
     MatListModule,
     FormsModule
   ],
-  providers: [],
+  providers: [CanBuy],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

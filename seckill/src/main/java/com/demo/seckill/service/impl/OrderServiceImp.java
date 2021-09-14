@@ -63,7 +63,9 @@ public class OrderServiceImp implements OrderService {
         if (!this.itemServiceImp.decreaseStock(itemId, amount)) {
             throw new BusinessException(EmBusinessError.ITEM_STOCK_NOT_ENOUGH);
         } else {
-            //3.订单入库
+            //3.支付加销量
+            this.itemServiceImp.increaseSales(itemId, amount);
+            //4.订单入库
             OrderModel orderModel = new OrderModel();
             orderModel.setUserId(userId);
             orderModel.setItemId(itemId);

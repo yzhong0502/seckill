@@ -20,4 +20,6 @@ public interface ItemDOMapper {
     int updateByPrimaryKeySelective(ItemDO record);
 
     int updateByPrimaryKey(ItemDO record);
+
+    int increaseSales(Integer id, Integer amount);
 }

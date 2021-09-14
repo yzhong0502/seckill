@@ -54,6 +54,7 @@ export class RegisterComponent implements OnInit {
     }).subscribe(response=>{
       console.log(response);
       if (response.status==='success') {
+        window.localStorage.setItem("userId", response.data.id);
         alert("Successfully registered!");
         this.router.navigateByUrl('/all');
       } else {
