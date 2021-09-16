@@ -7,7 +7,10 @@
                     <table>
                         <tr>
                             <td>{{item.title}}</td>
-                            <td></td>
+                            <td>
+                                <p *ngIf="item.promoStatus === 1" style="color: red;">The promotion will start on {{item.startDate}}</p>
+                                <p *ngIf="item.promoStatus === 2" style="color: red;">Now in promotion!</p>
+                            </td>                            
                         </tr>
                         <tr>
                             <td>sales: {{item.sales}}</td>
@@ -17,12 +20,19 @@
                             <td>{{item.description}}</td>
                             <td>
                                 <label for="amount_{{i}}">Amount: </label>
-                                <input type="number" id="amount_{{i}}" name="amount_{{i}}" [(ngModel)]="amountList[i]" ngModel required min="1" max="99" value="1">
+                                <input type="number" id="amount_{{i}}" name="amount_{{i}}" [(ngModel)]="amountList[i]" ngModel required min="1" max="99">
                             </td>
                         </tr>
                         <tr>
                             <td>{{item.price | currency}}</td>
-                            <td><button type="button" (click)="buy(i)">Buy</button>
+                            <td *ngIf="item.promoStatus === 2" style="color:red">Promo Price: {{item.promoPrice | currency}}</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <p *></p>
+                                <p *ngIf="item.promoStatus === 2" ></p>
+                            </td>
+                            <td><button type="button" (click)="buy(i)" [disabled]="item.promoStatus != 2">Buy</button>
                             </td>
                         </tr>
                     </table>

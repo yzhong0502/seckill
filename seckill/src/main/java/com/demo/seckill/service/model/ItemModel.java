@@ -27,6 +27,16 @@ public class ItemModel {
 
     @NotBlank(message="must have image Url")
     private String imgUrl;
+    //使用聚合模型，相当于普通商品的一个特殊属性，如果不为null即表示拥有还未结束的秒杀活动商品
+    private PromoModel promoModel;
+
+    public PromoModel getPromoModel() {
+        return promoModel;
+    }
+
+    public void setPromoModel(PromoModel promoModel) {
+        this.promoModel = promoModel;
+    }
 
     public Integer getId() {
         return id;

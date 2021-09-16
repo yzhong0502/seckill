@@ -1,5 +1,7 @@
 package com.demo.seckill.controller;
 
+import org.joda.time.DateTime;
+
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -19,6 +21,46 @@ public class ItemVO {
     private Integer sales;
 
     private String imgUrl;
+    //记录商品是否在秒杀活动中：0-没有活动；1-活动待开始；2-活动进行中
+    private Integer promoStatus;
+
+    private Integer promoId;
+
+    private String startDate;
+
+    private BigDecimal promoPrice;
+
+    public Integer getPromoStatus() {
+        return promoStatus;
+    }
+
+    public void setPromoStatus(Integer promoStatus) {
+        this.promoStatus = promoStatus;
+    }
+
+    public Integer getPromoId() {
+        return promoId;
+    }
+
+    public void setPromoId(Integer promoId) {
+        this.promoId = promoId;
+    }
+
+    public String getStartDate() {
+        return startDate;
+    }
+
+    public void setStartDate(String startDate) {
+        this.startDate = startDate;
+    }
+
+    public BigDecimal getPromoPrice() {
+        return promoPrice;
+    }
+
+    public void setPromoPrice(BigDecimal promoPrice) {
+        this.promoPrice = promoPrice;
+    }
 
     public Integer getId() {
         return id;

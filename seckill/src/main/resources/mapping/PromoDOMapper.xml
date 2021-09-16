@@ -7,9 +7,10 @@
     <result column="start_date" jdbcType="TIMESTAMP" property="startDate" />
     <result column="item_id" jdbcType="INTEGER" property="itemId" />
     <result column="promo_item_price" jdbcType="DOUBLE" property="promoItemPrice" />
+    <result column="end_date" jdbcType="TIMESTAMP" property="endDate" />
   </resultMap>
   <sql id="Base_Column_List">
-    id, promo_name, start_date, item_id, promo_item_price
+    id, promo_name, start_date, item_id, promo_item_price, end_date
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select 
@@ -17,15 +18,23 @@
     from promo
     where id = #{id,jdbcType=INTEGER}
   </select>
+  <select id="selectByItemId" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from promo
+    where item_id = #{itemId,jdbcType=INTEGER}
+  </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from promo
     where id = #{id,jdbcType=INTEGER}
   </delete>
   <insert id="insert" parameterType="com.demo.seckill.entity.PromoDO">
     insert into promo (id, promo_name, start_date, 
-      item_id, promo_item_price)
+      item_id, promo_item_price, end_date
+      )
     values (#{id,jdbcType=INTEGER}, #{promoName,jdbcType=VARCHAR}, #{startDate,jdbcType=TIMESTAMP}, 
-      #{itemId,jdbcType=INTEGER}, #{promoItemPrice,jdbcType=DOUBLE})
+      #{itemId,jdbcType=INTEGER}, #{promoItemPrice,jdbcType=DOUBLE}, #{endDate,jdbcType=TIMESTAMP}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.demo.seckill.entity.PromoDO">
     insert into promo
@@ -45,6 +54,9 @@
       <if test="promoItemPrice != null">
         promo_item_price,
       </if>
+      <if test="endDate != null">
+        end_date,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -61,6 +73,9 @@
       </if>
       <if test="promoItemPrice != null">
         #{promoItemPrice,jdbcType=DOUBLE},
+      </if>
+      <if test="endDate != null">
+        #{endDate,jdbcType=TIMESTAMP},
       </if>
     </trim>
   </insert>
@@ -79,6 +94,9 @@
       <if test="promoItemPrice != null">
         promo_item_price = #{promoItemPrice,jdbcType=DOUBLE},
       </if>
+      <if test="endDate != null">
+        end_date = #{endDate,jdbcType=TIMESTAMP},
+      </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
@@ -87,7 +105,8 @@
     set promo_name = #{promoName,jdbcType=VARCHAR},
       start_date = #{startDate,jdbcType=TIMESTAMP},
       item_id = #{itemId,jdbcType=INTEGER},
-      promo_item_price = #{promoItemPrice,jdbcType=DOUBLE}
+      promo_item_price = #{promoItemPrice,jdbcType=DOUBLE},
+      end_date = #{endDate,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

@@ -5,6 +5,7 @@ import com.demo.seckill.error.BusinessException;
 import com.demo.seckill.error.EmBusinessError;
 import com.demo.seckill.response.CommonReturnType;
 import com.demo.seckill.service.impl.OrderServiceImp;
+import com.demo.seckill.service.impl.PromoServiceImpl;
 import com.demo.seckill.service.model.ItemModel;
 import com.demo.seckill.service.model.OrderModel;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -26,6 +26,7 @@ import { SeckillComponent } from './seckill/seckill.component';
 import { AddItemComponent } from './add-item/add-item.component';
 import { ShoppingListComponent } from './shopping-list/shopping-list.component';
 import { HeaderComponent } from './header/header.component';
+import { ItemDetailComponent } from './item-detail/item-detail.component';
 
 
 @NgModule({
@@ -37,7 +38,8 @@ import { HeaderComponent } from './header/header.component';
     SeckillComponent,
     AddItemComponent,
     ShoppingListComponent,
-    HeaderComponent
+    HeaderComponent,
+    ItemDetailComponent
   ],
   imports: [
     BrowserModule,

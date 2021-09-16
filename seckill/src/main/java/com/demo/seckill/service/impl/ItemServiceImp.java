@@ -8,6 +8,7 @@ import com.demo.seckill.repository.ItemDOMapper;
 import com.demo.seckill.repository.ItemStockDOMapper;
 import com.demo.seckill.service.ItemService;
 import com.demo.seckill.service.model.ItemModel;
+import com.demo.seckill.service.model.PromoModel;
 import com.demo.seckill.validator.ValidationResult;
 import com.demo.seckill.validator.ValidatorImp;
 import org.springframework.beans.BeanUtils;
@@ -26,12 +27,14 @@ public class ItemServiceImp implements ItemService {
     private ItemDOMapper itemDOMapper;
     private ItemStockDOMapper itemStockDOMapper;
     private ValidatorImp validator;
+    private PromoServiceImpl promoService;
 
     @Autowired
-    public ItemServiceImp(ItemDOMapper itemDOMapper, ItemStockDOMapper itemStockDOMapper, ValidatorImp validator) {
+    public ItemServiceImp(ItemDOMapper itemDOMapper, ItemStockDOMapper itemStockDOMapper, ValidatorImp validator, PromoServiceImpl promoService) {
         this.itemDOMapper = itemDOMapper;
         this.itemStockDOMapper = itemStockDOMapper;
         this.validator = validator;
+        this.promoService = promoService;
     }
 
     @Override
@@ -65,7 +68,12 @@ public class ItemServiceImp implements ItemService {
         List<ItemDO> list = this.itemDOMapper.selectAll();
         List<ItemModel> itemModelList = list.stream().map(itemDO -> {
             ItemStockDO itemStockDO = this.itemStockDOMapper.selectByItemId(itemDO.getId());
-            return this.convertFromDataObject(itemDO, itemStockDO);
+            ItemModel itemModel = this.convertFromDataObject(itemDO, itemStockDO);
+            PromoModel promoModel = this.promoService.getPromoByItemId(itemDO.getId());
+            if (promoModel != null && promoModel.getStatus().intValue() != 3) {
+                itemModel.setPromoModel(promoModel);
+            }
+            return itemModel;
         }).collect(Collectors.toList());
         return itemModelList;
     }
@@ -74,8 +82,17 @@ public class ItemServiceImp implements ItemService {
     public ItemModel getItemById(Integer id) {
         ItemDO itemDO = this.itemDOMapper.selectByPrimaryKey(id);
         if (itemDO == null) return null;
+        //获得商品库存
         ItemStockDO itemStockDO = this.itemStockDOMapper.selectByItemId(id);
-        return this.convertFromDataObject(itemDO, itemStockDO);
+
+        ItemModel itemModel = this.convertFromDataObject(itemDO, itemStockDO);
+
+        //获得商品活动信息
+        PromoModel promoModel = this.promoService.getPromoByItemId(itemDO.getId());
+        if (promoModel != null && promoModel.getStatus().intValue() != 3) {
+            itemModel.setPromoModel(promoModel);
+        }
+        return itemModel;
     }
 
     @Override

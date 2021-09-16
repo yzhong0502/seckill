@@ -15,6 +15,7 @@ export class RequestService {
 
   private addItemUrl: string = "/item/create";
   private allItemUrl: string = "/item/all";
+  private itemUrl: string = "item/get/";
 
   private buyItemUrl: string = "/order/buy";
   private cancelOrderUrl: string = "/order/cancel/{id}";
@@ -53,6 +54,11 @@ export class RequestService {
 
   getAll(): Observable<any> {
     return this.http.get(environment.REQUEST_HOME + this.allItemUrl);
+  }
+
+  getItem(id :number): Observable<any> {
+    return this.http.get(environment.REQUEST_HOME + this.getItem + id);
+
   }
 
   buyItem(userId: number, itemId: number, amount: number): Observable<any> {

@@ -10,6 +10,27 @@ public class PromoModel {
     private String promoName;
     //活动开始时间
     private DateTime startDate;
+    //活动结束时间
+    private DateTime endDate;
+    //活动状态：1表示还未开始，2表示进行中，3表示已结束；
+    private Integer status;
+
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
+    }
+
+    public DateTime getEndDate() {
+        return endDate;
+    }
+
+    public void setEndDate(DateTime endDate) {
+        this.endDate = endDate;
+    }
+
     //活动商品
     private Integer itemId;
     //活动价格

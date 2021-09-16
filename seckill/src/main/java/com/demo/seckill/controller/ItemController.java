@@ -5,7 +5,10 @@ import com.demo.seckill.error.BusinessException;
 import com.demo.seckill.error.EmBusinessError;
 import com.demo.seckill.response.CommonReturnType;
 import com.demo.seckill.service.impl.ItemServiceImp;
+import com.demo.seckill.service.impl.PromoServiceImpl;
 import com.demo.seckill.service.model.ItemModel;
+import com.demo.seckill.service.model.PromoModel;
+import org.joda.time.format.DateTimeFormat;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,10 +24,12 @@ import java.util.stream.Collectors;
 @CrossOrigin
 public class ItemController extends BaseController {
     private ItemServiceImp itemServiceImp;
+    private PromoServiceImpl promoService;
 
     @Autowired
-    public ItemController(ItemServiceImp itemServiceImp) {
+    public ItemController(ItemServiceImp itemServiceImp, PromoServiceImpl promoService) {
         this.itemServiceImp = itemServiceImp;
+        this.promoService = promoService;
     }
 
     @GetMapping("/all")
@@ -55,7 +60,15 @@ public class ItemController extends BaseController {
         if (itemModel == null) return null;
         ItemVO itemVO = new ItemVO();
         BeanUtils.copyProperties(itemModel, itemVO);
-        System.out.println(itemVO.toString());
+        PromoModel promoModel = itemModel.getPromoModel();
+        if (promoModel != null) {
+            itemVO.setPromoId(promoModel.getId());
+            itemVO.setPromoStatus(promoModel.getStatus());
+            itemVO.setPromoPrice(promoModel.getPromoItemPrice());
+            itemVO.setStartDate(promoModel.getStartDate().toString(DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss")));
+        } else {
+            itemVO.setPromoStatus(0);
+        }
         return itemVO;
     }
 

@@ -14,6 +14,8 @@ public class PromoDO implements Serializable {
 
     private Double promoItemPrice;
 
+    private Date endDate;
+
     private static final long serialVersionUID = 1L;
 
     public Integer getId() {
@@ -56,6 +58,14 @@ public class PromoDO implements Serializable {
         this.promoItemPrice = promoItemPrice;
     }
 
+    public Date getEndDate() {
+        return endDate;
+    }
+
+    public void setEndDate(Date endDate) {
+        this.endDate = endDate;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -67,6 +77,7 @@ public class PromoDO implements Serializable {
         sb.append(", startDate=").append(startDate);
         sb.append(", itemId=").append(itemId);
         sb.append(", promoItemPrice=").append(promoItemPrice);
+        sb.append(", endDate=").append(endDate);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();
