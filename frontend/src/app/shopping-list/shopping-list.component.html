@@ -18,10 +18,7 @@
                         </tr>
                         <tr>
                             <td>{{item.description}}</td>
-                            <td>
-                                <label for="amount_{{i}}">Amount: </label>
-                                <input type="number" id="amount_{{i}}" name="amount_{{i}}" [(ngModel)]="amountList[i]" ngModel required min="1" max="99">
-                            </td>
+                            <td></td>
                         </tr>
                         <tr>
                             <td>{{item.price | currency}}</td>
@@ -32,7 +29,7 @@
                                 <p *></p>
                                 <p *ngIf="item.promoStatus === 2" ></p>
                             </td>
-                            <td><button type="button" (click)="buy(i)" [disabled]="item.promoStatus != 2">Buy</button>
+                            <td><button type="button" (click)="redirect(item.id)">Details</button>
                             </td>
                         </tr>
                     </table>

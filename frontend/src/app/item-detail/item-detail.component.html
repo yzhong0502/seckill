@@ -1,1 +1,51 @@
-<p>item-detail works!</p>
+
+<form #f="ngForm" name="f">
+    <mat-card class="item-card">
+        <mat-card-content>
+        <div class="row">
+            <div class="col">
+                    <img width="200 px" height="200 px" src="{{item.imgUrl}}">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                    <h3>{{item.title}}</h3>
+            </div>
+        </div>
+
+        <div class="row" *ngIf="item.promoStatus === 1">
+            <div class="col">
+                    <h4  style="color: red;">The promotion will start on {{item.startDate}}</h4>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <span>sales: {{item.sales}}<span><br>
+                </span>stock: {{item.stock}}</span><br>
+                <span>{{item.description}}</span>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col">
+                <span>{{item.price | currency}}</span><br>
+                <span *ngIf="item.promoStatus === 2" style="color:red">Promo Price: {{item.promoPrice | currency}} Now in promotion!</span>
+            </div>
+        </div>
+        
+        <div class="row">
+            <div class="col">  
+                <label for="amount">Amount: </label>
+                <input type="number" id="amount" name="amount" [(ngModel)]="amount" ngModel required min="1" max="99">
+            </div>
+        </div>        
+                       
+
+        </mat-card-content>
+
+        <mat-card-actions class='center'>
+            <button type="button" (click)="buy()" [disabled]="item.promoStatus != 2">Order</button>
+            <a [routerLink]="['/all']" style="float: right;">Go back</a>
+            </mat-card-actions>
+    </mat-card>
+</form>

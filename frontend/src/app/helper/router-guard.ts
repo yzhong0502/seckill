@@ -10,7 +10,7 @@ export class CanBuy implements CanActivate {
         route: ActivatedRouteSnapshot,
         state: RouterStateSnapshot): boolean {
             if (window.localStorage.getItem("userId") == null) {
-                this.router.navigateByUrl("");
+                this.router.navigate(['']);
                 return false;
             }
             return true;

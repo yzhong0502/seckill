@@ -1,0 +1,18 @@
+.item-card {
+    width: 30%;
+    margin-top: 100 px;
+    margin-bottom: auto;
+    margin-left: 35%;
+    margin-right: 35%;
+    
+}
+
+.row {
+    display: flex;
+    justify-content: center;
+  }
+  
+  .col {
+    flex: 1;
+    margin-right: 20px;
+  }
