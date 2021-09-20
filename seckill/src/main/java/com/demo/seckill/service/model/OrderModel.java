@@ -14,6 +14,8 @@ public class OrderModel {
     private Integer userId;
     @NotNull
     private Integer itemId;
+
+    private Integer promoId;
     @NotNull
     @Min(1)
     private Integer amount;
@@ -21,6 +23,14 @@ public class OrderModel {
     private BigDecimal itemPrice;
     @NotNull
     private BigDecimal orderPrice;//total price = itemPrice * amount
+
+    public Integer getPromoId() {
+        return promoId;
+    }
+
+    public void setPromoId(Integer promoId) {
+        this.promoId = promoId;
+    }
 
     public BigDecimal getItemPrice() {
         return itemPrice;

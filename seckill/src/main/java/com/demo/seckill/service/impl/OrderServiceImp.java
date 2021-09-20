@@ -31,6 +31,7 @@ public class OrderServiceImp implements OrderService {
     private ItemServiceImp itemServiceImp;
     private ValidatorImp validator;
     private SeqDOMapper seqDOMapper;
+    private PromoServiceImpl promoService;
 
     @Autowired
     public OrderServiceImp(OrderDOMapper orderDOMapper, UserServiceImpl userServiceImpl,
@@ -71,11 +72,17 @@ public class OrderServiceImp implements OrderService {
             OrderModel orderModel = new OrderModel();
             orderModel.setUserId(userId);
             orderModel.setItemId(itemId);
-            orderModel.setItemPrice(itemModel.getPromoModel().getPromoItemPrice());
+            if (itemModel.getPromoModel() != null) {
+                orderModel.setPromoId(itemModel.getPromoModel().getId());
+                orderModel.setItemPrice(itemModel.getPromoModel().getPromoItemPrice());
+            } else {
+                orderModel.setItemPrice(itemModel.getPrice());
+            }
+            orderModel.setOrderPrice(orderModel.getItemPrice().multiply(new BigDecimal(amount)));
             orderModel.setAmount(amount);
-            orderModel.setOrderPrice(itemModel.getPromoModel().getPromoItemPrice().multiply(new BigDecimal(amount)));
             //生成交易订单号
             orderModel.setId(this.generateOrderNo());
+
             this.orderDOMapper.insertSelective(this.convertFromOrderModel(orderModel));
             return orderModel;
         }

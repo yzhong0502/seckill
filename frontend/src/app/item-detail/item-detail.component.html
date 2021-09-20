@@ -16,6 +16,7 @@
         <div class="row" *ngIf="item.promoStatus === 1">
             <div class="col">
                     <h4  style="color: red;">The promotion will start on {{item.startDate}}</h4>
+                    <h4> Time Left: {{leftSec | number:'1.0-0'}}</h4>
             </div>
         </div>
         <div class="row">

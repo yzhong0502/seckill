@@ -15,6 +15,8 @@ public class OrderDO implements Serializable {
 
     private Double orderPrice;
 
+    private Integer promoId;
+
     private static final long serialVersionUID = 1L;
 
     public String getId() {
@@ -65,6 +67,14 @@ public class OrderDO implements Serializable {
         this.orderPrice = orderPrice;
     }
 
+    public Integer getPromoId() {
+        return promoId;
+    }
+
+    public void setPromoId(Integer promoId) {
+        this.promoId = promoId;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -77,6 +87,7 @@ public class OrderDO implements Serializable {
         sb.append(", amount=").append(amount);
         sb.append(", itemPrice=").append(itemPrice);
         sb.append(", orderPrice=").append(orderPrice);
+        sb.append(", promoId=").append(promoId);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();
