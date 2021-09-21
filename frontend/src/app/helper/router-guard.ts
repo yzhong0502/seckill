@@ -9,11 +9,11 @@ export class CanBuy implements CanActivate {
     canActivate(
         route: ActivatedRouteSnapshot,
         state: RouterStateSnapshot): boolean {
-            if (window.localStorage.getItem("userId") == null) {
-                this.router.navigate(['']);
-                return false;
+            if (window.localStorage.getItem("userId")) {
+                return true;
             }
-            return true;
+            this.router.navigate(['login']);
+            return false;
         }
     
 }

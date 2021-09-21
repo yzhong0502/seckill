@@ -61,7 +61,11 @@ export class RequestService {
 
   }
 
-  buyItem(userId: number, itemId: number, amount: number): Observable<any> {
-    return this.http.get(environment.REQUEST_HOME + this.buyItemUrl + "?userId=" + userId + "&itemId="+itemId+"&amount="+amount);
+  buyItem(userId: number, itemId: number, promoId: number, amount: number): Observable<any> {
+    let url = environment.REQUEST_HOME + this.buyItemUrl + "?userId=" + userId + "&itemId="+itemId+"&amount="+amount;
+    if (promoId != null) {
+      url = url + "&promoId=" + promoId;
+    }
+    return this.http.get(url);
   }
 }

@@ -73,7 +73,7 @@ export class ItemDetailComponent implements OnInit {
       this.router.navigateByUrl("http://localhost:4200/");
       return;
     }
-    this.service.buyItem(parseInt(userId), this.itemId, this.amount).subscribe((response)=>{
+    this.service.buyItem(parseInt(userId), this.itemId, this.item.promoId, this.amount).subscribe((response)=>{
       if (response.status === "success") {
         alert("Ordered successfully!");
         location.reload();
