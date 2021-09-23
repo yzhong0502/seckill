@@ -14,7 +14,8 @@ const routes: Routes = [
   {path:"seckill", component: SeckillComponent},
   {path:"addItem", component: AddItemComponent},
   {path:"all", component: ShoppingListComponent, canActivate: [CanBuy]},
-  {path:"all/:id", component: ItemDetailComponent, canActivate: [CanBuy]}
+  {path:"all/:id", component: ItemDetailComponent, canActivate: [CanBuy]},
+  {path:"**", redirectTo:""}
 
   
 ];
