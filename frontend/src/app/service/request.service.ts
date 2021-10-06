@@ -61,8 +61,8 @@ export class RequestService {
 
   }
 
-  buyItem(userId: number, itemId: number, promoId: number, amount: number): Observable<any> {
-    let url = environment.REQUEST_HOME + this.buyItemUrl + "?userId=" + userId + "&itemId="+itemId+"&amount="+amount;
+  buyItem(itemId: number, promoId: number, amount: number, token:string): Observable<any> {
+    let url = environment.REQUEST_HOME + this.buyItemUrl + "&itemId="+itemId+"&amount="+amount+"&token="+token;
     if (promoId != null) {
       url = url + "&promoId=" + promoId;
     }

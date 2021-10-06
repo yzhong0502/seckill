@@ -6,9 +6,10 @@ import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.io.Serializable;
 
 //核心领域模型
-public class UserModel {
+public class UserModel implements Serializable {
     private Integer id;
     @NotBlank(message="Name can't be empty!")
     private String name;

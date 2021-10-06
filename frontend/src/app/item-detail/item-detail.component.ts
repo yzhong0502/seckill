@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { RequestService } from '../service/request.service';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-item-detail',
@@ -67,13 +68,13 @@ export class ItemDetailComponent implements OnInit {
   }
 
   buy() {
-    let userId = window.localStorage.getItem("userId");
-    if (userId == null) {
-      alert("Error! Can't find user data!");
-      this.router.navigateByUrl("http://localhost:4200/");
+    let token = window.localStorage.getItem("token");
+    if (token == null) {
+      alert("Error! Haven't login!");
+      this.router.navigateByUrl(environment.HOME_PAGE);
       return;
     }
-    this.service.buyItem(parseInt(userId), this.itemId, this.item.promoId, this.amount).subscribe((response)=>{
+    this.service.buyItem(this.itemId, this.item.promoId, this.amount, token).subscribe((response)=>{
       if (response.status === "success") {
         alert("Ordered successfully!");
         location.reload();

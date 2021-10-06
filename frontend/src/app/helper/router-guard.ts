@@ -9,7 +9,7 @@ export class CanBuy implements CanActivate {
     canActivate(
         route: ActivatedRouteSnapshot,
         state: RouterStateSnapshot): boolean {
-            if (window.localStorage.getItem("userId")) {
+            if (window.localStorage.getItem("token")) {
                 return true;
             }
             this.router.navigate(['login']);

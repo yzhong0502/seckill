@@ -4,7 +4,9 @@
 
 export const environment = {
   production: false,
-  REQUEST_HOME: "http://localhost:8090"
+  REQUEST_HOME: "http://localhost:8090",
+  HOME_PAGE: "http://localhost:4200/"
+
 };
 
 /*

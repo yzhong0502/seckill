@@ -8,25 +8,37 @@ import com.demo.seckill.service.impl.OrderServiceImp;
 import com.demo.seckill.service.impl.PromoServiceImpl;
 import com.demo.seckill.service.model.ItemModel;
 import com.demo.seckill.service.model.OrderModel;
+import com.demo.seckill.service.model.UserModel;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletRequest;
 
 @RestController("order")
 @RequestMapping("/order")
 @CrossOrigin
 public class OrderController extends BaseController {
     private OrderServiceImp orderServiceImp;
+    private HttpServletRequest httpServletRequest;
+    private RedisTemplate redisTemplate;
 
     @Autowired
-    public OrderController(OrderServiceImp orderServiceImp) {
+    public OrderController(OrderServiceImp orderServiceImp, HttpServletRequest httpServletRequest, RedisTemplate redisTemplate) {
         this.orderServiceImp = orderServiceImp;
+        this.httpServletRequest = httpServletRequest;
+        this.redisTemplate = redisTemplate;
     }
 
     @GetMapping("/buy")
-    public CommonReturnType buyItem(@RequestParam Integer userId, @RequestParam Integer itemId, @RequestParam(required = false) Integer promoId, @RequestParam Integer amount) throws BusinessException {
-        System.out.println(userId+" is buying "+itemId + " for "+amount);
-        OrderModel orderModel = this.orderServiceImp.createOrder(userId, itemId, promoId, amount);
+    public CommonReturnType buyItem(@RequestParam String token, @RequestParam Integer itemId, @RequestParam(required = false) Integer promoId, @RequestParam Integer amount) throws BusinessException {
+        UserModel userModel = (UserModel) redisTemplate.opsForValue().get(token);
+        if (userModel == null) {
+            throw new BusinessException(EmBusinessError.USER_LOGIN_FAIL);
+        }
+        System.out.println(userModel.getId()+" is buying "+itemId + " for "+amount);
+        this.orderServiceImp.createOrder(userModel.getId(), itemId, promoId, amount);
         return CommonReturnType.create(null);
     }
 

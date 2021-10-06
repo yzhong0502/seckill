@@ -8,12 +8,16 @@ import com.demo.seckill.service.model.UserModel;
 import org.apache.tomcat.util.security.MD5Encoder;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.cache.CacheProperties;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
 import java.util.Random;
+import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
 
 @RestController("user")
@@ -21,13 +25,15 @@ import java.util.Random;
 @CrossOrigin
 public class UserController extends BaseController {
     private UserServiceImpl userService;
-    //private HttpServletRequest httpServletRequest;
+    private HttpServletRequest httpServletRequest;
+    private RedisTemplate redisTemplate;
     private String otp = "";
 
     @Autowired
-    public UserController(UserServiceImpl userService) {
+    public UserController(UserServiceImpl userService, HttpServletRequest httpServletRequest, RedisTemplate redisTemplate) {
         this.userService = userService;
-        //this.httpServletRequest = httpServletRequest;
+        this.httpServletRequest = httpServletRequest;
+        this.redisTemplate = redisTemplate;
     }
 
     @GetMapping("/get")
@@ -68,7 +74,13 @@ public class UserController extends BaseController {
     public CommonReturnType register(@RequestBody UserModel userModel) throws BusinessException {
         System.out.println(userModel.toString());
         userModel = this.userService.register(userModel);
-        return CommonReturnType.create(this.convertFromModelObject(userModel));
+        //生成登陆凭证token，uuid
+        String uuidToken = getToken();
+        //建立token和用户登陆状态之间的联系
+        redisTemplate.opsForValue().set(uuidToken, userModel);
+        redisTemplate.expire(uuidToken, 1, TimeUnit.HOURS);
+        //下发token
+        return CommonReturnType.create(uuidToken);
     }
 
     private UserVO convertFromModelObject(UserModel userModel) {
@@ -81,7 +93,20 @@ public class UserController extends BaseController {
     @PostMapping("/login")
     public CommonReturnType login(@RequestBody Map<String,String> data) throws BusinessException {
         UserModel userModel = this.userService.login(data.get("telphone"), data.get("password"));
-        return CommonReturnType.create(this.convertFromModelObject(userModel));
+        //若用户登陆成功将对应对登陆信息和登陆凭证一起存入redis
+        //生成登陆凭证token，uuid
+        String uuidToken = getToken();
+        //建立token和用户登陆状态之间的联系
+        redisTemplate.opsForValue().set(uuidToken, userModel);
+        redisTemplate.expire(uuidToken, 1, TimeUnit.HOURS);
+        //下发token
+        return CommonReturnType.create(uuidToken);
+    }
+
+    private String getToken() {
+        String uuidToken = UUID.randomUUID().toString();
+        uuidToken = uuidToken.replace("-","");
+        return uuidToken;
     }
 
 }
