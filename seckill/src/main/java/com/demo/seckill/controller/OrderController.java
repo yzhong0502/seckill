@@ -32,7 +32,7 @@ public class OrderController extends BaseController {
     }
 
     @GetMapping("/buy")
-    public CommonReturnType buyItem(@RequestParam String token, @RequestParam Integer itemId, @RequestParam(required = false) Integer promoId, @RequestParam Integer amount) throws BusinessException {
+    public CommonReturnType buyItem(@RequestParam Integer itemId, @RequestParam Integer amount, @RequestParam String token, @RequestParam(required = false) Integer promoId) throws BusinessException {
         UserModel userModel = (UserModel) redisTemplate.opsForValue().get(token);
         if (userModel == null) {
             throw new BusinessException(EmBusinessError.USER_LOGIN_FAIL);

@@ -33,6 +33,7 @@ export class LoginComponent implements OnInit {
     this.service.login(this.form.value).subscribe(response=>{
       console.log(response);
       if (response.status==='success') {
+        console.log(response.data);
         window.localStorage.setItem("token", response.data);
         alert("Successfully logged in!");
         this.router.navigateByUrl('/all');

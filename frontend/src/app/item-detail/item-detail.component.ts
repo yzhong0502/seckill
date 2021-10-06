@@ -74,7 +74,7 @@ export class ItemDetailComponent implements OnInit {
       this.router.navigateByUrl(environment.HOME_PAGE);
       return;
     }
-    this.service.buyItem(this.itemId, this.item.promoId, this.amount, token).subscribe((response)=>{
+    this.service.buyItem(this.itemId, this.amount, token, this.item.promoId).subscribe((response)=>{
       if (response.status === "success") {
         alert("Ordered successfully!");
         location.reload();

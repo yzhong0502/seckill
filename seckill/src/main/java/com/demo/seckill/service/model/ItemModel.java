@@ -3,9 +3,10 @@ package com.demo.seckill.service.model;
 import javax.validation.constraints.Min;
 import org.hibernate.validator.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.io.Serializable;
 import java.math.BigDecimal;
 
-public class ItemModel {
+public class ItemModel implements Serializable {
 
     private Integer id;
 

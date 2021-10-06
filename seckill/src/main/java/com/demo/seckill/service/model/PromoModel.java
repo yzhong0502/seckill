@@ -2,9 +2,10 @@ package com.demo.seckill.service.model;
 
 import org.joda.time.DateTime;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 
-public class PromoModel {
+public class PromoModel implements Serializable {
     private Integer id;
     //活动名称
     private String promoName;
