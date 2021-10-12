@@ -1,5 +1,9 @@
 package com.demo.seckill.service.model;
 
+import com.demo.seckill.serializer.JodaDateTimeJsonDeserializer;
+import com.demo.seckill.serializer.JodaDateTimeJsonSerializer;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import org.joda.time.DateTime;
 
 import java.io.Serializable;
@@ -10,6 +14,8 @@ public class PromoModel implements Serializable {
     //活动名称
     private String promoName;
     //活动开始时间
+    @JsonSerialize(using = JodaDateTimeJsonSerializer.class)
+    @JsonDeserialize(using = JodaDateTimeJsonDeserializer.class)
     private DateTime startDate;
     //活动结束时间
     private DateTime endDate;
