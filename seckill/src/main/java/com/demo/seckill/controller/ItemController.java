@@ -1,9 +1,11 @@
 package com.demo.seckill.controller;
 
+import com.alibaba.druid.sql.ast.expr.SQLCaseExpr;
 import com.demo.seckill.entity.ItemStockDO;
 import com.demo.seckill.error.BusinessException;
 import com.demo.seckill.error.EmBusinessError;
 import com.demo.seckill.response.CommonReturnType;
+import com.demo.seckill.service.impl.CacheServiceImpl;
 import com.demo.seckill.service.impl.ItemServiceImp;
 import com.demo.seckill.service.impl.PromoServiceImpl;
 import com.demo.seckill.service.model.ItemModel;
@@ -28,12 +30,14 @@ public class ItemController extends BaseController {
     private ItemServiceImp itemServiceImp;
     private PromoServiceImpl promoService;
     private RedisTemplate redisTemplate;
+    private CacheServiceImpl cacheService;
 
     @Autowired
-    public ItemController(ItemServiceImp itemServiceImp, PromoServiceImpl promoService, RedisTemplate redisTemplate) {
+    public ItemController(ItemServiceImp itemServiceImp, PromoServiceImpl promoService, RedisTemplate redisTemplate, CacheServiceImpl cacheService) {
         this.itemServiceImp = itemServiceImp;
         this.promoService = promoService;
         this.redisTemplate = redisTemplate;
+        this.cacheService = cacheService;
     }
 
     @GetMapping("/all")
@@ -47,14 +51,22 @@ public class ItemController extends BaseController {
 
     @GetMapping("/get/{id}")
     public CommonReturnType getItem(@PathVariable Integer id) {
-        //查看redis中是否已经有信息
-        ItemModel itemModel = (ItemModel) this.redisTemplate.opsForValue().get("item_"+id);
+        String key = "item_" + id;
+        //1 查看本地缓存
+        ItemModel itemModel = (ItemModel) this.cacheService.getFromCommonCache(key);
         if (itemModel == null) {
-            //如果没有，从database取出并存入redis。需要设置expire时间
-            itemModel = this.itemServiceImp.getItemById(id);
-            this.redisTemplate.opsForValue().set("item_"+id, itemModel);
-            this.redisTemplate.expire("item_"+id, 10, TimeUnit.MINUTES);
+            //2 查看redis中是否已经有信息
+            itemModel = (ItemModel) this.redisTemplate.opsForValue().get(key);
+            if (itemModel == null) {
+                //如果没有，从database取出并存入redis。需要设置expire时间
+                itemModel = this.itemServiceImp.getItemById(id);
+                this.redisTemplate.opsForValue().set(key, itemModel);
+                this.redisTemplate.expire(key, 10, TimeUnit.MINUTES);
+            }
+            //填充本地缓存
+            this.cacheService.setCommonCache(key, itemModel);
         }
+
         return CommonReturnType.create(this.convertFromModel(itemModel));
     }
 
