@@ -7,6 +7,8 @@ public interface UserService {
 
     UserModel getUserById(Integer id);
 
+    UserModel getUserByIdFromCache(Integer id);
+
     UserModel register(UserModel userModel) throws BusinessException;
 
     UserModel login(String telphone, String password) throws BusinessException;

@@ -55,9 +55,9 @@ public class OrderServiceImp implements OrderService {
     @Transactional
     public OrderModel createOrder(Integer userId, Integer itemId, Integer promoId, Integer amount) throws BusinessException{
         //1.校验下单状态：用户是否合法，商品是否存在，购买数量是否正确
-        UserModel userModel = this.userServiceImpl.getUserById(userId);
+        UserModel userModel = this.userServiceImpl.getUserByIdFromCache(userId);
         if (userModel == null) throw new BusinessException(EmBusinessError.USER_NOT_EXIST, "User not valid");
-        ItemModel itemModel = this.itemServiceImp.getItemById(itemId);
+        ItemModel itemModel = this.itemServiceImp.getItemByIdFromCache(itemId);
         if (itemModel == null) throw new BusinessException(EmBusinessError.ITEM_NOT_FOUND, "Item not valid");
         if (amount <= 0 || amount > 99) {
             throw new BusinessException(EmBusinessError.PARAMETER_VALIDATION_ERROR,"Amount not valid");

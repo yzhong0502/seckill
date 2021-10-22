@@ -15,6 +15,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import sun.misc.BASE64Encoder;
@@ -22,6 +23,7 @@ import sun.misc.BASE64Encoder;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.concurrent.TimeUnit;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -29,12 +31,15 @@ public class UserServiceImpl implements UserService {
     private UserDOMapper userDOMapper;
     private UserCreDOMapper userCreDOMapper;
     private ValidatorImp validator;
+    private RedisTemplate redisTemplate;
 
     @Autowired
-    public UserServiceImpl(UserDOMapper userDOMapper, UserCreDOMapper userCreDOMapper, ValidatorImp validator) {
+    public UserServiceImpl(UserDOMapper userDOMapper, UserCreDOMapper userCreDOMapper, ValidatorImp validator,
+                           RedisTemplate redisTemplate) {
         this.userCreDOMapper = userCreDOMapper;
         this.userDOMapper = userDOMapper;
         this.validator = validator;
+        this.redisTemplate = redisTemplate;
     }
 
     @Override
@@ -43,6 +48,17 @@ public class UserServiceImpl implements UserService {
         if (userDO == null) return null;
         UserCreDO userCreDO = userCreDOMapper.selectByUserId(id);
         return convertFromDataObject(userDO, userCreDO);
+    }
+
+    @Override
+    public UserModel getUserByIdFromCache(Integer id) {
+        UserModel userModel = (UserModel) this.redisTemplate.opsForValue().get("user_"+id);
+        if (userModel == null) {
+            userModel = this.getUserById(id);
+            this.redisTemplate.opsForValue().set("user_validate_"+id, userModel);
+            this.redisTemplate.expire("user_validate_"+id, 10, TimeUnit.MINUTES);
+        }
+        return userModel;
     }
 
     @Override
