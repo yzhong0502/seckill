@@ -1,17 +1,12 @@
 package com.demo.seckill.controller;
 
-import com.demo.seckill.entity.ItemStockDO;
 import com.demo.seckill.error.BusinessException;
 import com.demo.seckill.error.EmBusinessError;
 import com.demo.seckill.response.CommonReturnType;
-import com.demo.seckill.service.impl.OrderServiceImp;
-import com.demo.seckill.service.impl.PromoServiceImpl;
-import com.demo.seckill.service.model.ItemModel;
-import com.demo.seckill.service.model.OrderModel;
+import com.demo.seckill.service.OrderService;
 import com.demo.seckill.service.model.UserModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -20,13 +15,13 @@ import javax.servlet.http.HttpServletRequest;
 @RequestMapping("/order")
 @CrossOrigin
 public class OrderController extends BaseController {
-    private OrderServiceImp orderServiceImp;
+    private OrderService orderService;
     private HttpServletRequest httpServletRequest;
     private RedisTemplate redisTemplate;
 
     @Autowired
-    public OrderController(OrderServiceImp orderServiceImp, HttpServletRequest httpServletRequest, RedisTemplate redisTemplate) {
-        this.orderServiceImp = orderServiceImp;
+    public OrderController(OrderService orderService, HttpServletRequest httpServletRequest, RedisTemplate redisTemplate) {
+        this.orderService = orderService;
         this.httpServletRequest = httpServletRequest;
         this.redisTemplate = redisTemplate;
     }
@@ -38,13 +33,13 @@ public class OrderController extends BaseController {
             throw new BusinessException(EmBusinessError.USER_LOGIN_FAIL);
         }
         System.out.println(userModel.getId()+" is buying "+itemId + " for "+amount);
-        this.orderServiceImp.createOrder(userModel.getId(), itemId, promoId, amount);
+        this.orderService.createOrder(userModel.getId(), itemId, promoId, amount);
         return CommonReturnType.create(null);
     }
 
     @GetMapping("/cancel/{id}")
     public CommonReturnType cancelOrder(@PathVariable String id) throws BusinessException {
-        this.orderServiceImp.cancelOrder(id);
+        this.orderService.cancelOrder(id);
         return CommonReturnType.create(null);
     }
 }

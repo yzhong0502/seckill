@@ -6,6 +6,8 @@ import com.demo.seckill.error.EmBusinessError;
 import com.demo.seckill.repository.*;
 import com.demo.seckill.service.ItemService;
 import com.demo.seckill.service.OrderService;
+import com.demo.seckill.service.PromoService;
+import com.demo.seckill.service.UserService;
 import com.demo.seckill.service.model.ItemModel;
 import com.demo.seckill.service.model.OrderModel;
 import com.demo.seckill.service.model.UserModel;
@@ -17,29 +19,27 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
-import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
 public class OrderServiceImp implements OrderService {
     private OrderDOMapper orderDOMapper;
-    private UserServiceImpl userServiceImpl;
-    private ItemServiceImp itemServiceImp;
+    private UserService userService;
+    private ItemService itemService;
     private ValidatorImp validator;
     private SeqDOMapper seqDOMapper;
-    private PromoServiceImpl promoService;
+    private PromoService promoService;
 
     @Autowired
-    public OrderServiceImp(OrderDOMapper orderDOMapper, UserServiceImpl userServiceImpl,
-                           ItemServiceImp itemServiceImp,
+    public OrderServiceImp(OrderDOMapper orderDOMapper, UserService userService,
+                           ItemService itemService,
                            ValidatorImp validator, SeqDOMapper seqDOMapper) {
         this.orderDOMapper = orderDOMapper;
-        this.userServiceImpl = userServiceImpl;
-        this.itemServiceImp = itemServiceImp;
+        this.userService = userService;
+        this.itemService = itemService;
         this.validator = validator;
         this.seqDOMapper = seqDOMapper;
     }
@@ -55,9 +55,9 @@ public class OrderServiceImp implements OrderService {
     @Transactional
     public OrderModel createOrder(Integer userId, Integer itemId, Integer promoId, Integer amount) throws BusinessException{
         //1.校验下单状态：用户是否合法，商品是否存在，购买数量是否正确
-        UserModel userModel = this.userServiceImpl.getUserByIdFromCache(userId);
+        UserModel userModel = this.userService.getUserByIdFromCache(userId);
         if (userModel == null) throw new BusinessException(EmBusinessError.USER_NOT_EXIST, "User not valid");
-        ItemModel itemModel = this.itemServiceImp.getItemByIdFromCache(itemId);
+        ItemModel itemModel = this.itemService.getItemByIdFromCache(itemId);
         if (itemModel == null) throw new BusinessException(EmBusinessError.ITEM_NOT_FOUND, "Item not valid");
         if (amount <= 0 || amount > 99) {
             throw new BusinessException(EmBusinessError.PARAMETER_VALIDATION_ERROR,"Amount not valid");
@@ -72,11 +72,11 @@ public class OrderServiceImp implements OrderService {
         }
 
         //2.落单减库存
-        if (!this.itemServiceImp.decreaseStock(itemId, amount)) {
+        if (!this.itemService.decreaseStock(itemId, amount)) {
             throw new BusinessException(EmBusinessError.ITEM_STOCK_NOT_ENOUGH);
         } else {
             //3.支付加销量
-            this.itemServiceImp.increaseSales(itemId, amount);
+            this.itemService.increaseSales(itemId, amount);
             //4.订单入库
             OrderModel orderModel = new OrderModel();
             orderModel.setUserId(userId);

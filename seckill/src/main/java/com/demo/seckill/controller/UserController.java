@@ -3,17 +3,14 @@ package com.demo.seckill.controller;
 import com.demo.seckill.error.BusinessException;
 import com.demo.seckill.error.EmBusinessError;
 import com.demo.seckill.response.CommonReturnType;
-import com.demo.seckill.service.impl.UserServiceImpl;
+import com.demo.seckill.service.UserService;
 import com.demo.seckill.service.model.UserModel;
-import org.apache.tomcat.util.security.MD5Encoder;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.cache.CacheProperties;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import java.nio.charset.StandardCharsets;
 import java.util.Map;
 import java.util.Random;
 import java.util.UUID;
@@ -24,13 +21,13 @@ import java.util.concurrent.TimeUnit;
 @RequestMapping("/user")
 @CrossOrigin
 public class UserController extends BaseController {
-    private UserServiceImpl userService;
+    private UserService userService;
     private HttpServletRequest httpServletRequest;
     private RedisTemplate redisTemplate;
     private String otp = "";
 
     @Autowired
-    public UserController(UserServiceImpl userService, HttpServletRequest httpServletRequest, RedisTemplate redisTemplate) {
+    public UserController(UserService userService, HttpServletRequest httpServletRequest, RedisTemplate redisTemplate) {
         this.userService = userService;
         this.httpServletRequest = httpServletRequest;
         this.redisTemplate = redisTemplate;

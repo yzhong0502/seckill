@@ -9,17 +9,18 @@ import com.demo.seckill.repository.ItemStockDOMapper;
 import com.demo.seckill.service.ItemService;
 import com.demo.seckill.service.model.ItemModel;
 import com.demo.seckill.service.model.PromoModel;
+import com.demo.seckill.service.PromoService;
 import com.demo.seckill.validator.ValidationResult;
 import com.demo.seckill.validator.ValidatorImp;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
@@ -29,11 +30,11 @@ public class ItemServiceImp implements ItemService {
     private ItemDOMapper itemDOMapper;
     private ItemStockDOMapper itemStockDOMapper;
     private ValidatorImp validator;
-    private PromoServiceImpl promoService;
+    private PromoService promoService;
     private RedisTemplate redisTemplate;
 
     @Autowired
-    public ItemServiceImp(ItemDOMapper itemDOMapper, ItemStockDOMapper itemStockDOMapper, ValidatorImp validator, PromoServiceImpl promoService, RedisTemplate redisTemplate) {
+    public ItemServiceImp(ItemDOMapper itemDOMapper, ItemStockDOMapper itemStockDOMapper, ValidatorImp validator, @Lazy PromoService promoService, RedisTemplate redisTemplate) {
         this.itemDOMapper = itemDOMapper;
         this.itemStockDOMapper = itemStockDOMapper;
         this.validator = validator;
@@ -113,8 +114,10 @@ public class ItemServiceImp implements ItemService {
     @Override
     @Transactional//多个操作都需要加，查询操作也需要一致
     public boolean decreaseStock(Integer itemId, Integer amount) throws BusinessException {
-        int affectedRow = this.itemStockDOMapper.decreaseStock(itemId, amount);
-        return affectedRow > 0;
+        //扣减库存缓存化
+        long leftStock = redisTemplate.opsForValue().increment("promo_item_stock_"+itemId,amount.intValue()*-1);
+        //int affectedRow = this.itemStockDOMapper.decreaseStock(itemId, amount);
+        return leftStock >= 0;
     }
 
     @Override

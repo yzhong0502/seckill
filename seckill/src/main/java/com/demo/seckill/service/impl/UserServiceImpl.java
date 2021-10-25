@@ -10,7 +10,6 @@ import com.demo.seckill.service.UserService;
 import com.demo.seckill.service.model.UserModel;
 import com.demo.seckill.validator.ValidationResult;
 import com.demo.seckill.validator.ValidatorImp;
-import com.mysql.cj.protocol.Message;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
