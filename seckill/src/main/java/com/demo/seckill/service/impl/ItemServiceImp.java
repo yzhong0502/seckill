@@ -4,6 +4,7 @@ import com.demo.seckill.entity.ItemDO;
 import com.demo.seckill.entity.ItemStockDO;
 import com.demo.seckill.error.BusinessException;
 import com.demo.seckill.error.EmBusinessError;
+import com.demo.seckill.mq.Producer;
 import com.demo.seckill.repository.ItemDOMapper;
 import com.demo.seckill.repository.ItemStockDOMapper;
 import com.demo.seckill.service.ItemService;
@@ -12,6 +13,10 @@ import com.demo.seckill.service.model.PromoModel;
 import com.demo.seckill.service.PromoService;
 import com.demo.seckill.validator.ValidationResult;
 import com.demo.seckill.validator.ValidatorImp;
+import org.apache.rocketmq.client.exception.MQBrokerException;
+import org.apache.rocketmq.client.exception.MQClientException;
+import org.apache.rocketmq.client.producer.SendResult;
+import org.apache.rocketmq.remoting.exception.RemotingException;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
@@ -32,14 +37,16 @@ public class ItemServiceImp implements ItemService {
     private ValidatorImp validator;
     private PromoService promoService;
     private RedisTemplate redisTemplate;
+    private Producer producer;
 
     @Autowired
-    public ItemServiceImp(ItemDOMapper itemDOMapper, ItemStockDOMapper itemStockDOMapper, ValidatorImp validator, @Lazy PromoService promoService, RedisTemplate redisTemplate) {
+    public ItemServiceImp(ItemDOMapper itemDOMapper, ItemStockDOMapper itemStockDOMapper, ValidatorImp validator, @Lazy PromoService promoService, RedisTemplate redisTemplate, Producer producer) {
         this.itemDOMapper = itemDOMapper;
         this.itemStockDOMapper = itemStockDOMapper;
         this.validator = validator;
         this.promoService = promoService;
         this.redisTemplate = redisTemplate;
+        this.producer = producer;
     }
 
     @Override
@@ -117,7 +124,14 @@ public class ItemServiceImp implements ItemService {
         //扣减库存缓存化
         long leftStock = redisTemplate.opsForValue().increment("promo_item_stock_"+itemId,amount.intValue()*-1);
         //int affectedRow = this.itemStockDOMapper.decreaseStock(itemId, amount);
-        return leftStock >= 0;
+        if (leftStock >= 0) {
+            //发送消息
+            boolean success = producer.asyncReduceStock(itemId, amount);
+            if (success) return true;
+            //not success add stock back
+            redisTemplate.opsForValue().increment("promo_item_stock_"+itemId,amount.intValue());
+        }
+        return false;
     }
 
     @Override

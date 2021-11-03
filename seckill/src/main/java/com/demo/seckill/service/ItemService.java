@@ -2,6 +2,9 @@ package com.demo.seckill.service;
 
 import com.demo.seckill.error.BusinessException;
 import com.demo.seckill.service.model.ItemModel;
+import org.apache.rocketmq.client.exception.MQBrokerException;
+import org.apache.rocketmq.client.exception.MQClientException;
+import org.apache.rocketmq.remoting.exception.RemotingException;
 
 import java.util.List;
 

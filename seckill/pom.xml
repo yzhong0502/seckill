@@ -34,6 +34,18 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+		<!--rocket mq
+		<dependency>
+			<groupId>org.rocketmq.spring.boot</groupId>
+			<artifactId>rocketmq-spring-boot-starter</artifactId>
+			<version>1.0.0.RELEASE</version>
+		</dependency>
+		-->
+		<dependency>
+			<groupId>org.apache.rocketmq</groupId>
+			<artifactId>rocketmq-client</artifactId>
+			<version>4.9.2</version>
+		</dependency>
 		<dependency>
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
@@ -86,6 +98,7 @@
 			<artifactId>guava</artifactId>
 			<version>19.0</version>
 		</dependency>
+
 	</dependencies>
 
 	<build>

@@ -36,8 +36,8 @@ public class ItemController extends BaseController {
     }
 
     @GetMapping("/publish")
-    public CommonReturnType publishPromo(@RequestParam Integer id){
-        this.promoService.publishPromo(id);
+    public CommonReturnType publishPromo(@RequestParam Integer promoId){
+        this.promoService.publishPromo(promoId);
         return CommonReturnType.create(null);
     }
 
