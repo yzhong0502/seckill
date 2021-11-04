@@ -3,6 +3,7 @@ package com.demo.seckill.service.impl;
 import com.demo.seckill.entity.*;
 import com.demo.seckill.error.BusinessException;
 import com.demo.seckill.error.EmBusinessError;
+import com.demo.seckill.mq.Producer;
 import com.demo.seckill.repository.*;
 import com.demo.seckill.service.ItemService;
 import com.demo.seckill.service.OrderService;
@@ -22,6 +23,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -32,16 +34,19 @@ public class OrderServiceImp implements OrderService {
     private ValidatorImp validator;
     private SeqDOMapper seqDOMapper;
     private PromoService promoService;
+    private StockLogDOMapper stockLogDOMapper;
+
 
     @Autowired
     public OrderServiceImp(OrderDOMapper orderDOMapper, UserService userService,
                            ItemService itemService,
-                           ValidatorImp validator, SeqDOMapper seqDOMapper) {
+                           ValidatorImp validator, SeqDOMapper seqDOMapper, StockLogDOMapper stockLogDOMapper) {
         this.orderDOMapper = orderDOMapper;
         this.userService = userService;
         this.itemService = itemService;
         this.validator = validator;
         this.seqDOMapper = seqDOMapper;
+        this.stockLogDOMapper = stockLogDOMapper;
     }
 
     @Override
@@ -53,7 +58,7 @@ public class OrderServiceImp implements OrderService {
 
     @Override
     @Transactional
-    public OrderModel createOrder(Integer userId, Integer itemId, Integer promoId, Integer amount) throws BusinessException{
+    public OrderModel createOrder(Integer userId, Integer itemId, Integer promoId, Integer amount, String stockLogId) throws BusinessException{
         //1.校验下单状态：用户是否合法，商品是否存在，购买数量是否正确
         UserModel userModel = this.userService.getUserByIdFromCache(userId);
         if (userModel == null) throw new BusinessException(EmBusinessError.USER_NOT_EXIST, "User not valid");
@@ -78,6 +83,11 @@ public class OrderServiceImp implements OrderService {
             //3.支付加销量
             this.itemService.increaseSales(itemId, amount);
             //4.订单入库
+            //别忘了更新log
+            if (!updateStockLog(stockLogId, true)) {
+                throw new BusinessException(EmBusinessError.UNKNOWN_ERROR, "Update log status failed.");
+            }
+
             OrderModel orderModel = new OrderModel();
             orderModel.setUserId(userId);
             orderModel.setItemId(itemId);
@@ -151,4 +161,36 @@ public class OrderServiceImp implements OrderService {
         orderDO.setItemPrice(orderModel.getItemPrice().doubleValue());
         return orderDO;
     }
+
+    @Override
+    public String initStockLog(Integer itemId, Integer amount) {
+        StockLogDO stockLogDO = new StockLogDO();
+        //?为什么要用随机id而不用increment id
+        stockLogDO.setStockLogId(UUID.randomUUID().toString().replace("-",""));
+        stockLogDO.setItemId(itemId);
+        stockLogDO.setAmount(amount);
+        stockLogDO.setStatus(1);//初始状态
+        this.stockLogDOMapper.insertSelective(stockLogDO);
+        return stockLogDO.getStockLogId();
+    }
+
+    @Override
+    public boolean updateStockLog(String stock_log_id, boolean success) {
+        StockLogDO stockLogDO = this.stockLogDOMapper.selectByPrimaryKey(stock_log_id);
+        if (stockLogDO != null && stockLogDO.getStatus() == 1) {
+            stockLogDO.setStatus(success? 2 : 3);
+            int affectedRow = this.stockLogDOMapper.updateByPrimaryKeySelective(stockLogDO);
+            return affectedRow > 0;
+        }
+        return false;
+    }
+
+    @Override
+    public int getStockLogStatus(String stockLogId) {
+        StockLogDO stockLogDO = stockLogDOMapper.selectByPrimaryKey(stockLogId);
+        if (stockLogDO == null) return -1;
+        return stockLogDO.getStatus();
+    }
+
+
 }

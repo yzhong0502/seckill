@@ -58,4 +58,8 @@ public class Consumer {
         consumer.start();
     }
 
+    @PreDestroy
+    public void shutdown() {
+        consumer.shutdown();
+    }
 }

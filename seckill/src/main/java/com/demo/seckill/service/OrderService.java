@@ -11,7 +11,15 @@ public interface OrderService {
     //两种方式
     //1。通过前端url获得promoId然后下单接口内校验对应id是否属于对应商品且活动在进行中
     //2。直接在下单接口内判断对应商品是否存在promo活动，若存在则以promo price下单
-    OrderModel createOrder(Integer userId, Integer itemId, Integer promoId, Integer amount) throws BusinessException;
+    OrderModel createOrder(Integer userId, Integer itemId, Integer promoId, Integer amount, String stockLogId) throws BusinessException;
 
     void cancelOrder(String id) throws BusinessException;
+
+    //初始化库存流水
+    String initStockLog(Integer itemId, Integer amount);
+
+    //update库存流水
+    boolean updateStockLog(String stockLogId, boolean success);
+
+    int getStockLogStatus(String stockLogId);
 }

@@ -93,6 +93,7 @@
                selectByExampleQueryId="false"
         />
         -->
+        <!--
         <table schema="" tableName="item_order" domainObjectName="OrderDO"
                enableCountByExample="false"
                enableDeleteByExample="false"
@@ -100,6 +101,7 @@
                enableSelectByExample="false"
                selectByExampleQueryId="false"
         />
+        -->
         <!--
         <table schema="" tableName="sequence_info" domainObjectName="SeqDO"
                enableCountByExample="false"
@@ -118,6 +120,13 @@
                selectByExampleQueryId="false"
         />
         -->
+        <table schema="" tableName="stock_log" domainObjectName="StockLogDO"
+               enableCountByExample="false"
+               enableDeleteByExample="false"
+               enableUpdateByExample="false"
+               enableSelectByExample="false"
+               selectByExampleQueryId="false"
+        />
     </context>
 </generatorConfiguration>
 
