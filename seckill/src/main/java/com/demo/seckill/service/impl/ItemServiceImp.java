@@ -126,10 +126,14 @@ public class ItemServiceImp implements ItemService {
         //扣减库存缓存化: 需要提前进行发布
         long leftStock = redisTemplate.opsForValue().increment("promo_item_stock_"+itemId,amount.intValue()*-1);
         //int affectedRow = this.itemStockDOMapper.decreaseStock(itemId, amount);
-        if (leftStock >= 0) {
+        if (leftStock > 0) {
             return true;
             //not success add stock back
             //redisTemplate.opsForValue().increment("promo_item_stock_"+itemId,amount.intValue());
+        } else if (leftStock == 0) {
+            //打上库存已售罄的标识
+            redisTemplate.opsForValue().set("promo_item_stock_invalid_"+itemId, "true");
+            return true;
         }
         return false;
     }

@@ -34,6 +34,11 @@ public class OrderController extends BaseController {
         if (userModel == null) {
             throw new BusinessException(EmBusinessError.USER_LOGIN_FAIL);
         }
+        //check if sold out
+        if (redisTemplate.hasKey("promo_item_stock_invalid_"+itemId)) {
+            throw new BusinessException(EmBusinessError.ITEM_STOCK_NOT_ENOUGH);
+        }
+
         System.out.println(userModel.getId()+" is buying "+itemId + " for "+amount);
 
         //新建流水log用于追踪异步操作

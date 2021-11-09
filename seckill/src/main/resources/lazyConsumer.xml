@@ -1,0 +1,18 @@
+<!-- 自定义实现的消息监听 -->
+<bean name="messageListenerImpl" class="com.demo.seckill.listener"/>
+        <!-- 消费者实例 -->
+<bean id="consumer" class="org.apache.rocketmq.client.consumer.DefaultMQPushConsumer" init-method="start"
+      destroy-method="shutdown" lazy-init="true">
+<property name="namesrvAddr" value="localhost:9876"/>
+<property name="instanceName" value="push"/>
+<property name="consumerGroup" value="CONSUMER_GROUP"/>
+<property name="subscription">
+    <map>
+        <entry key="TOPIC" value="TAGS"/>
+    </map>
+</property>
+<property name="messageListener" ref="messageListenerImpl"/>
+<property name="consumeThreadMin" value="2"/>
+<property name="consumeThreadMax" value="4"/>
+<property name="consumeMessageBatchMaxSize" value="1"/>
+</bean>
