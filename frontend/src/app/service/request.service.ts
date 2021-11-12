@@ -18,7 +18,9 @@ export class RequestService {
   private itemUrl: string = "/item/get/";
 
   private buyItemUrl: string = "/order/buy";
+  private seckillTokenUrl: string = "/order/seckillToken";
   private cancelOrderUrl: string = "/order/cancel/{id}";
+  public verifyCodeUrl: string = environment.REQUEST_HOME+"/order/verifyCode?token=";
 
 
   constructor(private http: HttpClient) { }
@@ -61,10 +63,18 @@ export class RequestService {
 
   }
 
-  buyItem(itemId: number, amount: number, token:string, promoId: number): Observable<any> {
+  getPromoToken(itemId: number, token:string, promoId: number, verifyCode: string): Observable<any> {
+    let url = environment.REQUEST_HOME + this.seckillTokenUrl + "?itemId="+itemId+"&token="+token+"&promoId=" + promoId+"&code="+verifyCode;
+    return this.http.get(url);
+  }
+
+  buyItem(itemId: number, amount: number, token: string, promoId: number | null, promoToken: string | null): Observable<any> {
     let url = environment.REQUEST_HOME + this.buyItemUrl + "?itemId="+itemId+"&amount="+amount+"&token="+token;
     if (promoId != null) {
       url = url + "&promoId=" + promoId;
+    }
+    if (promoToken != null) {
+      url = url + "&promoToken=" + promoToken;
     }
     return this.http.get(url);
   }

@@ -59,21 +59,14 @@ public class OrderServiceImp implements OrderService {
     @Override
     @Transactional
     public OrderModel createOrder(Integer userId, Integer itemId, Integer promoId, Integer amount, String stockLogId) throws BusinessException{
-        //1.校验下单状态：用户是否合法，商品是否存在，购买数量是否正确
-        UserModel userModel = this.userService.getUserByIdFromCache(userId);
-        if (userModel == null) throw new BusinessException(EmBusinessError.USER_NOT_EXIST, "User not valid");
-        ItemModel itemModel = this.itemService.getItemByIdFromCache(itemId);
-        if (itemModel == null) throw new BusinessException(EmBusinessError.ITEM_NOT_FOUND, "Item not valid");
+        //校验下单状态：用户是否合法，商品是否存在, 活动是否有效 并入seckill token生成过程
+        ItemModel itemModel = this.itemService.getItemById(itemId);
+        if (itemModel == null) {
+            throw new BusinessException(EmBusinessError.ITEM_NOT_FOUND);
+        }
+        //1. 校验购买数量是否正确
         if (amount <= 0 || amount > 99) {
             throw new BusinessException(EmBusinessError.PARAMETER_VALIDATION_ERROR,"Amount not valid");
-        }
-        //校验活动信息
-        if (promoId != null) {
-            if (promoId.intValue() != itemModel.getPromoModel().getId()) {
-                throw new BusinessException(EmBusinessError.PARAMETER_VALIDATION_ERROR,"Promo not valid");
-            } else if (itemModel.getPromoModel().getStatus().intValue() != 2) {
-                throw new BusinessException(EmBusinessError.PARAMETER_VALIDATION_ERROR,"Promo hasn't start yet");
-            }
         }
 
         //2.落单减库存

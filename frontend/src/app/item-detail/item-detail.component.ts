@@ -15,6 +15,9 @@ export class ItemDetailComponent implements OnInit {
   private startTime = 0;
   leftSec = 0;
   private id: any;
+  verifyCode: string = '';
+  codeImgSource: any = {}; 
+  hidden:boolean = true;
 
   constructor(private service : RequestService, private route: ActivatedRoute, private router:Router) { }
 
@@ -56,6 +59,17 @@ export class ItemDetailComponent implements OnInit {
     });
   }
 
+  getVerifyCode() {
+    let token = window.localStorage.getItem("token");
+    if (token == null) {
+      alert("Error! Haven't login!");
+      this.router.navigateByUrl(environment.HOME_PAGE);
+      return;
+    }
+    this.codeImgSource = this.service.verifyCodeUrl+token;
+    this.hidden = false;
+  }
+
   countDown(): void {
     let datetime = new Date().getTime();
     let sec = (this.startTime - datetime) / 1000;
@@ -74,13 +88,24 @@ export class ItemDetailComponent implements OnInit {
       this.router.navigateByUrl(environment.HOME_PAGE);
       return;
     }
-    this.service.buyItem(this.itemId, this.amount, token, this.item.promoId).subscribe((response)=>{
-      if (response.status === "success") {
-        alert("Ordered successfully!");
-        location.reload();
-      } else {
-        alert("Fail to get all items! " + response.data.errMsg);
-      }
-    })
+
+    let promoToken = "";
+    if (this.item.promoId != null) {
+      this.service.getPromoToken(this.itemId, token, this.item.promoId, this.verifyCode).subscribe((response)=>{
+        promoToken = response.data;
+        console.log("get promo token: " + promoToken);
+        //必须放在这里以确保在获得promo token之后下单
+        if (token == null) return;
+        this.service.buyItem(this.itemId, this.amount, token, this.item.promoId, promoToken).subscribe((response)=>{
+          if (response.status === "success") {
+            alert("Ordered successfully!");
+            location.reload();
+          } else {
+            alert(response.data.errMsg);
+          }
+        });
+      });
+    }
+    
   }
 }

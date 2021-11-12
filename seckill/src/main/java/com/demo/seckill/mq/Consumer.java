@@ -54,7 +54,7 @@ public class Consumer {
                 return ConsumeConcurrentlyStatus.CONSUME_SUCCESS;
             }
         });
-        consumer.start();
+        //consumer.start();
     }
 
     @PreDestroy

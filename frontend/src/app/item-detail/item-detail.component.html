@@ -39,13 +39,22 @@
                 <label for="amount">Amount: </label>
                 <input type="number" id="amount" name="amount" [(ngModel)]="amount" ngModel required min="1" max="99">
             </div>
-        </div>        
+        </div>    
+        
+        <div class="row">
+            <div class="col">  
+                <button type="button" id="verify" name="verify" (click)="getVerifyCode()">Get Verify Code</button>
+                <img src="{{codeImgSource}}" [hidden]="hidden"/><br>
+                <label for="verifyCode">Verify Code: </label>
+                <input id="verifyCode" name="verifyCode" [(ngModel)]="verifyCode" ngModel required maxlength="4">
+            </div>
+        </div>   
                        
 
         </mat-card-content>
 
         <mat-card-actions class='center'>
-            <button type="button" (click)="buy()" [disabled]="item.promoStatus != 2">Order</button>
+            <button type="button" (click)="buy()" [disabled]="item.promoStatus != 2 && !f.valid">Order</button>
             <a [routerLink]="['/all']" style="float: right;">Go back</a>
             </mat-card-actions>
     </mat-card>
